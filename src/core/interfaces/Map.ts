@@ -157,7 +157,7 @@ export interface api {
 	unsendMessage(messageID: string, callback?: (err: any) => void): any;
 	changeBio(bio: string, publish: boolean, callback?: ((err: any) => void)): any;
 	httpPost(url: string, form: object, callback?: ((err: any, res: any) => void), notAPI?: boolean): any;
-	[methodName: string]: (...args: any[]) =>any;
+	(methodName: string): (...args: any[]) =>any;
 }
 
 interface Attachment {
