@@ -153,7 +153,20 @@ export interface api {
 		attachment?: ReadStream,
 	}, threadID: string, callback?: ((err: any, messageInfo: event) => void) | string, messageID?: string): any;
 	sendTypingIndicator(threadID: string, callback?: ((err: any) => void)): any;
+	/**
+	 * Dùng để thả biểu cảm vào tin nhắn \
+	 * Nếu không bật `sendMessage` dùng được: 😍, 😆, 😮, 😢, 😠, 👍, 👎
+	 * @param reaction Icon muốn bot thả vào tin nhắn nếu trong set true ở `customIcon` thì chỉ dùng dược 1 vài icon
+	 * @param messageID Id tin nhắn muốn bot thả biểu cảm 
+	 * @param callback Không skip được như `sendMessage`
+	 * @param customIcon Cho phép bất kì icon nào
+	 */
 	setMessageReaction(reaction: string , messageID: string, callback?: (err: any) => void, customIcon?: boolean): any;
+	/**
+	 * Dùng để thu hồi tin nhắn
+	 * @param messageID Id tin nhắn của mình !!Phải là tin nhắn của bot gửi!!
+	 * @param callback 
+	 */
 	unsendMessage(messageID: string, callback?: (err: any) => void): any;
 	changeBio(bio: string, publish: boolean, callback?: ((err: any) => void)): any;
 	httpPost(url: string, form: object, callback?: ((err: any, res: any) => void), notAPI?: boolean): any;
