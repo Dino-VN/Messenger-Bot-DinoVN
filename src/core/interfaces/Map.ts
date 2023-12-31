@@ -1,8 +1,5 @@
 import { aliases, commands, cooldowns, events } from "..";
-<<<<<<< HEAD
 import { ReadStream } from "fs";
-=======
->>>>>>> parent of 84a1155 (Merge remote-tracking branch 'origin/master' into Core)
 
 //facebook-comment-api
 interface FbApi {
@@ -63,13 +60,61 @@ export interface api {
 	serverInstance: any,
 	uptime: number,
 
-	guilds: string[],
-
 	// fb: FbApi,
 	//------
+	/**
+	 * Dùng để đổi tên người dùng trong nhóm hoặc chat riêng
+	 * @param nickname Tên để đổi thôi
+	 * @param threadID Id của nhóm chat hoặc id người dùng để bot chat"
+	 * @param participantID Id người muốn đổi tên
+	 * @param callback 
+	 * @example
+	 * ```js
+	 * api.changeNickname("Example", "000000000000000", "000000000000000", (err) => {
+   *    if(err) return console.error(err);
+   * });
+	 * ```
+	 */
 	changeNickname(nickname: string, threadID: string, participantID: string, callback?: ((err: any) => void)): any;
-	getCurrentUserID(): string
+	/**
+	 * Lấy Id của tài khoản hiện tại đang login thôi
+	 */
+	getCurrentUserID(): string;
 	listenMqtt(callback: ((err: any, event: any) => void)): any;
+	/**
+	 * Tìm thông tin người dùng từ tên
+	 * @param name Tên người muốn tìm
+	 * @param callback 
+	 * @example
+	 * ```js
+	 * api.getUserID("Marc Zuckerbot", (err, data) => {
+   *    if(err) return console.error(err);
+	 *
+   *    // Send the message to the best match (best by Facebook's criteria)
+   *    var msg = "Hello!"
+   *    var threadID = data[0].userID;
+   *    api.sendMessage(msg, threadID);
+   * });
+	 * ```
+	 */
+	getUserId(name: string, callback: (err: any, obj: any[]) => void): any;
+	/**
+	 * Lấy thông tin người dùng từ id người dùng
+	 * @param ids Array id người dùng muốn lấy
+	 * @param callback 
+	 * @example
+	 * ```js
+	 *  api.getUserInfo([1, 2, 3, 4], (err, ret) => {
+ 	 *    if(err) return console.error(err);
+	 *
+   *    for(var prop in ret) {
+   *        if(ret.hasOwnProperty(prop) && ret[prop].isBirthday) {
+   *            api.sendMessage("Happy birthday :)", prop);
+   *        }
+   *    }
+   * });
+	 * ```
+	 */
 	getUserInfo(ids: string[], callback?: ((err: any, obj: UserInfo[]) => void)): UserInfo[];
 	addUserToGroup(userID: string, threadID: string, callback?: ((err: any) => void)): any;
 	changeAdminStatus(threadID: string, adminIDs: string | string[], adminStatus: boolean, callback: ((err: any) => void)): any
@@ -80,6 +125,28 @@ export interface api {
 		unreadCount: string,
 		isGroup: boolean,
 	}[]) => any)): any;
+	/**
+	 * Dùng để gửi tin nhắn đến nhóm hoặc người dùng
+	 * @param message Tin nhắn gửi hoặc Object chứa body và attachment
+	 * @param threadID Nhóm hoặc người dùng để gửi tin nhắn đến
+	 * @param callback Có thể bỏ qua dùng thẳng messageID
+	 * @param messageID Id của tin nhắn muốn bot reply lại
+	 * @example Gửi tin nhắn
+	 * ```js
+	 * var yourID = "000000000000000";
+   * var msg = "Hey!";
+   * api.sendMessage(msg, yourID);
+	 * ```
+	 * @example Gửi tin nhắn với tệp đính kèm
+	 * ```js
+	 * var yourID = "000000000000000";
+   * var msg = {
+   *    body: "Hey!",
+   *    attachment: fs.createReadStream(__dirname + '/image.jpg')
+   * }
+	 * ```
+    api.sendMessage(msg, yourID);
+	 */
 	sendMessage(message: string | {
 		body?: string,
 		attachment?: ReadStream,
