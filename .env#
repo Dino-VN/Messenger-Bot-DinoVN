@@ -1,0 +1,6 @@
+#Database
+MONGO_URI=
+#Bot
+OWNER_ID=
+BOT_PERFIX=!
+PORT=
