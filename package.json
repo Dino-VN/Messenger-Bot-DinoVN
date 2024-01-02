@@ -2,7 +2,7 @@
   "name": "lifesave-bot",
   "version": "1.0.0",
   "description": "",
-  "main": "start.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "npx tsx ./src/index.ts",
