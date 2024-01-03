@@ -61,11 +61,10 @@ export interface api {
 	uptime: number,
 
 	// fb: FbApi,
-	//------
 	/**
 	 * Dùng để đổi tên người dùng trong nhóm hoặc chat riêng
 	 * @param nickname Tên để đổi thôi
-	 * @param threadID Id của nhóm chat hoặc id người dùng để bot chat"
+	 * @param threadID Id của nhóm chat hoặc id người dùng để đổi tên trong chat riêng
 	 * @param participantID Id người muốn đổi tên
 	 * @param callback 
 	 * @example

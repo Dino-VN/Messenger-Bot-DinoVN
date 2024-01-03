@@ -1,6 +1,4 @@
-import 'console-info'
-import 'console-warn'
-import 'console-error'
+import { doneAnimation, loadingAnimation } from "./module/console.ts";
 
 import { fork } from 'child_process';
 
@@ -14,15 +12,20 @@ let startTime = 0;
 function main() {
 	if(!existsSync('./.temp')) {
 		console.info('Không tìm thấy thư mục .temp đang tạo thư mục')
+		let loading = loadingAnimation('Đang tạo thư mục .temp')
 		mkdirSync('./.temp')
+		doneAnimation("Đang tạo thư mục .temp", loading)
 	}
 	if(!existsSync('./log')) {
 		console.info('Không tìm thấy thư mục log đang tạo thư mục')
+		let loading = loadingAnimation('Đang tạo thư mục log')
 		mkdirSync('./log')
+		doneAnimation("Đang tạo thư mục log", loading)
 	}
 
-	console.info('Đang dọn dẹp thư mục .temp')
+	let loading = loadingAnimation('Đang dọn dẹp thư mục .temp')
 	const tempFiles = readdirSync('./.temp')
+	doneAnimation('Đang dọn dẹp thư mục .temp', loading)
 	for (const file of tempFiles) {
 		unlinkSync('./.temp/' + file)
 	}
@@ -41,7 +44,7 @@ function main() {
 		}
 		else {
 			console.log();
-			console.log('Bot has stopped, press Ctrl + C to exit.');
+			console.log('Bot đã dừng, ấn Ctrl + C để thoát.');
 		}
 	});
 
@@ -50,6 +53,9 @@ function main() {
 			console.info('Nhận yêu cầu khởi động lại...');
 			child.kill();
 			setTimeout(() => main(), 5 * 1000)
+		}
+		if(message == 'stop') {
+			child.kill();
 		}
 	})
 }

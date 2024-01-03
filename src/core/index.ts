@@ -1,6 +1,4 @@
-import "console-info";
-import "console-warn";
-import "console-error";
+import { loadingAnimation, doneAnimation, errAnimation } from "../module/console.ts";
 import "dotenv/config";
 
 // const fbchat = require("facebook-chat-api")
@@ -64,17 +62,39 @@ for (const file of eventFiles) {
 }
 
 function startBot() {
+  if(!fs.existsSync("./appstate.json")) {
+    console.error("Không tìm thấy appstate.json, hãy tạo mới")
+    if (process.send) process.send("stop")
+    return 
+  }
+  let loading = loadingAnimation("Đang kết nối với Facebook...");
+  
   fbchat(
     { appState: JSON.parse(fs.readFileSync("./appstate.json", "utf8")) },
     async (err: any, api: any) => {
       if (err) {
-        console.error(err);
         if (err.code == "ETIMEDOUT") {
+          errAnimation("Đang kết nối với Facebook...", loading)
           console.warn("Lỗi timeout, đang thử lại");
           startBot();
+        } else {
+          errAnimation("Đang kết nối với Facebook...", loading)
+          console.error(err);
+          if (process.send) process.send("stop")
         }
         return;
       }
+
+      doneAnimation("Đang kết nối với Facebook...", loading)
+      
+      api.setOptions({
+        listenEvents: true,
+        autoMarkDelivery: false,
+        // userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
+        updatePresence: true,
+        autoReconnect: true,
+        logLevel: "silent"
+      });
 
       api.commands = commands;
       api.aliases = aliases;
@@ -94,13 +114,10 @@ function startBot() {
         }
       }
 
-      api.setOptions({
-        listenEvents: true,
-        autoMarkDelivery: false,
-        // userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
-        updatePresence: true,
-        autoReconnect: true,
-      });
+      const userId = api.getCurrentUserID()
+      const user = api.getUserInfo()
+
+      console.info(`Đã kết nối với ${user[userId].name} (${userId})`)
 
       api.uptime = Date.now();
 
