@@ -61,12 +61,24 @@ for (const file of eventFiles) {
   });
 }
 
+let restartCount = 0
+
+function handleRestartCount() {
+	restartCount++;
+	setTimeout(() => {
+		restartCount--;
+	}, 1 * 60 * 1000);
+}
+
 function loadMqtt(api: api) {
-  api.listenMqtt(async (err: any, event: any) => {
+  const event = api.listenMqtt(async (err: any, event: any) => {
     // console.log(api.guilds)
     if (err) {
       console.error(err);
-      console.info("Đang chạy lại Mqtt")
+      handleRestartCount()
+      if(err.error == 'Not logged in') return console.log("Đã dừng thử chạy lại Mqtt vì cần thay thế appstate")
+      if(restartCount > 3) return console.error("Thử chạy lại Mqtt 3 lần vẫn lỗi hãy kiểm tra lại!")
+      console.info("Đang chạy lại Mqtt do lỗi")
       loadMqtt(api);
       return;
     }
@@ -78,6 +90,10 @@ function loadMqtt(api: api) {
       if (hevent) (hevent as Event).execute(api, event);
     });
   });
+  setTimeout(() => {
+    event.stopListening()
+    loadMqtt(api)
+  }, 1 * 60 * 60 * 1000)
 }
 
 function startBot() {
