@@ -45,5 +45,4 @@ export {
   loadingAnimation,
   doneAnimation,
   errAnimation,
-  warnAnimation
 }

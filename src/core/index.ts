@@ -101,6 +101,11 @@ function startBot() {
       api.cooldowns = cooldowns;
       api.events = events;
 
+      const userId = api.getCurrentUserID()
+      const user = await api.getUserInfo([userId])
+
+      console.info(`Đã kết nối với ${user[userId].name} (${userId})`)
+
       const functionFiles = fs
         .readdirSync("./src/functions")
         .filter((file) => file.endsWith(".ts"));
@@ -113,11 +118,6 @@ function startBot() {
           functionFile.execute(api)
         }
       }
-
-      const userId = api.getCurrentUserID()
-      const user = api.getUserInfo()
-
-      console.info(`Đã kết nối với ${user[userId].name} (${userId})`)
 
       api.uptime = Date.now();
 
