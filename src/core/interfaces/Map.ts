@@ -75,6 +75,7 @@ export interface api {
 	 * ```
 	 */
 	changeNickname(nickname: string, threadID: string, participantID: string, callback?: ((err: any) => void)): any;
+	getAppState(): Object;
 	/**
 	 * Lấy Id của tài khoản hiện tại đang login thôi
 	 */
