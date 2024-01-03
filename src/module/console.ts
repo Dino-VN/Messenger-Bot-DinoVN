@@ -1,4 +1,23 @@
-import chalk from "chalk";
+const colors = {
+  reset: "\x1B[0m",
+  black: "\x1B[30m",
+  red: "\x1B[31m",
+  green: "\x1B[32m",
+  yellow: "\x1B[33m",
+  blue: "\x1B[34m",
+  magenta: "\x1B[35m",
+  cyan: "\x1B[36m",
+  white: "\x1B[37m",
+  gray: "\x1B[90m",
+  brightBlack: "\x1B[90m",
+  brightRed: "\x1B[91m",
+  brightGreen: "\x1B[92m",
+  brightYellow: "\x1B[93m",
+  brightBlue: "\x1B[94m",
+  brightMagenta: "\x1B[95m",
+  brightCyan: "\x1B[96m",
+  brightWhite: "\x1B[97m",
+};
 
 function loadingAnimation(
   text = "",
@@ -8,7 +27,7 @@ function loadingAnimation(
   let x = 0;
 
   return setInterval(function () {
-    process.stdout.write("\r" + chalk.gray("[") + chars[x++] + chalk.gray("] ") + text);
+    process.stdout.write("\r" + `${colors.gray}[${colors.green}` + chars[x++] + `${colors.gray}]${colors.reset} ` + text);
     x = x % chars.length;
   }, delay);
 }
@@ -18,7 +37,7 @@ function doneAnimation(
   loadingAnimation: any
 ) {
   clearInterval(loadingAnimation);
-  process.stdout.write("\r" + chalk.gray("[") + chalk.green("✓") + chalk.gray("] ") + text + "\n");
+  process.stdout.write("\r" + `${colors.gray}[${colors.green}✓${colors.gray}]${colors.reset} ` + text + "\n");
 }
 
 function errAnimation(
@@ -26,19 +45,19 @@ function errAnimation(
   loadingAnimation: any
 ) {
   clearInterval(loadingAnimation);
-  process.stdout.write("\r" + chalk.gray("[") + chalk.red("X") + chalk.gray("] ") + text + "\n");
+  process.stdout.write("\r" + `${colors.gray}[${colors.red}X${colors.gray}]${colors.reset} ` + text + "\n");
 }
 
 console.info = (message: any, ...optionalParams: any[]) => {
-  console.log(chalk.gray("[") + chalk.green("INFO") + chalk.gray("]"), message, ...optionalParams);
+  console.log(`${colors.gray}[${colors.green}INFO${colors.gray}]${colors.reset}`, message, ...optionalParams);
 }
 
 console.error = (...data: any[]) => {
-  console.log(chalk.gray("[") + chalk.red("ERROR") + chalk.gray("]"), ...data);
+  console.log(`${colors.gray}[${colors.red}ERROR${colors.gray}]${colors.reset}`, ...data);
 }
 
 console.warn = (...data: any[]) => {
-  console.log(chalk.gray("[") + chalk.yellow("WARN") + chalk.gray("]"), ...data);
+  console.log(`${colors.gray}[${colors.yellow}WARN${colors.gray}]${colors.reset}`, ...data);
 }
 
 export {
