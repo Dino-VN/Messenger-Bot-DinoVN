@@ -1,4 +1,4 @@
-import { api, event } from "../core/interfaces/Map";
+import { api, event } from "../interfaces/Map";
 import { configs } from "./data";
 
 export async function getPrefix(api: api, event: event, id: string) {

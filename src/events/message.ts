@@ -2,7 +2,7 @@ import { Collection } from "@discordjs/collection";
 import { Command, Event } from "../core/interfaces/index.ts";
 import fs from "fs";
 import { aliases, commands } from "../core/index.ts";
-import { getPrefix } from "../module/prefix.ts";
+import { getPrefix } from "../core/module/prefix.ts";
 
 const requestCountTime = 2;
 

@@ -1,5 +1,5 @@
 import { Event } from "../core/interfaces/index.ts";
-import { getPrefix } from "../module/prefix.ts";
+import { getPrefix } from "../core/module/prefix.ts";
 
 export const event: Event = {
   name: ["message", "message_reply"],

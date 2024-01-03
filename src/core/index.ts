@@ -1,4 +1,4 @@
-import { loadingAnimation, doneAnimation, errAnimation } from "../module/console.ts";
+import { loadingAnimation, doneAnimation, errAnimation } from "./module/console.ts";
 import "dotenv/config";
 
 // const fbchat = require("facebook-chat-api")
@@ -9,7 +9,7 @@ import fs from "fs";
 import { Collection } from "@discordjs/collection";
 
 import { Command, Cooldown, Event, Function } from "./interfaces/index.ts";
-// import { api, event } from "./interfaces/Map.ts";
+import { api } from "./interfaces/Map.ts";
 
 const events: Collection<string, Collection<string, Event>> = new Collection();
 const commands: Collection<string, Command> = new Collection();
@@ -61,6 +61,25 @@ for (const file of eventFiles) {
   });
 }
 
+function loadMqtt(api: api) {
+  api.listenMqtt(async (err: any, event: any) => {
+    // console.log(api.guilds)
+    if (err) {
+      console.error(err);
+      console.info("Đang chạy lại Mqtt")
+      loadMqtt(api);
+      return;
+    }
+
+    // console.log(events)
+    events.map(eventfile => {
+      let hevent = eventfile.get(event.type);
+      // console.log(hevent)
+      if (hevent) (hevent as Event).execute(api, event);
+    });
+  });
+}
+
 function startBot() {
   if(!fs.existsSync("./appstate.json")) {
     console.error("Không tìm thấy appstate.json, hãy tạo mới")
@@ -70,7 +89,14 @@ function startBot() {
   let loading = loadingAnimation("Đang kết nối với Facebook...");
   
   fbchat(
-    { appState: JSON.parse(fs.readFileSync("./appstate.json", "utf8")) },
+    { appState: JSON.parse(fs.readFileSync("./appstate.json", "utf8")) }, 
+    {
+      listenEvents: true,
+      autoMarkDelivery: false,
+      // userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
+      updatePresence: true,
+      logLevel: "silent"
+    },
     async (err: any, api: any) => {
       if (err) {
         if (err.code == "ETIMEDOUT") {
@@ -86,15 +112,6 @@ function startBot() {
       }
 
       doneAnimation("Đang kết nối với Facebook...", loading)
-      
-      api.setOptions({
-        listenEvents: true,
-        autoMarkDelivery: false,
-        // userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
-        updatePresence: true,
-        autoReconnect: true,
-        logLevel: "silent"
-      });
 
       api.commands = commands;
       api.aliases = aliases;
@@ -121,26 +138,7 @@ function startBot() {
 
       api.uptime = Date.now();
 
-      api.listenMqtt(async (err: any, event: any) => {
-        // console.log(api.guilds)
-        if (err) {
-          console.error(err);
-          return;
-        }
-
-        // console.log(events)
-        events.map(eventfile => {
-          let hevent = eventfile.get(event.type);
-          // console.log(hevent)
-          if (hevent) (hevent as Event).execute(api, event);
-        });
-
-        // switch (event.type) {
-        //   default:
-        //     // console.log(event)
-        //     break;
-        // }
-      });
+      loadMqtt(api);
     }
   );
 }

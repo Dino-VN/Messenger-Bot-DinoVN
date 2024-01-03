@@ -1,5 +1,5 @@
 import { Command } from '../core/interfaces';
-import { configs } from '../module/data';
+import { configs } from '../core/module/data';
 
 export const command: Command = {
   name: 'prefix',

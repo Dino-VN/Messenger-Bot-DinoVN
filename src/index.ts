@@ -1,4 +1,4 @@
-import { doneAnimation, loadingAnimation } from "./module/console.ts";
+import { doneAnimation, loadingAnimation } from "./core/module/console.ts";
 
 import { fork } from 'child_process';
 
