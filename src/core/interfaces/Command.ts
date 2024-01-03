@@ -16,6 +16,8 @@ interface Run {
  * @property {Any} groups - Nhóm mà lệnh sẽ chạy `all` để cho dùng trong tất cả các nhóm.\
  * Ví dụ 1: `"All"` - chạy trong tất cả các nhóm\
  * Ví dụ 2: `[ "group1", "group2" ]` - chạy trong nhóm 1 và 2 (group1 và group2 phải là id)
+ * @property {number} cooldown - Chỉnh delay của lệnh mặc đinh 3s. **Số tính theo giây*
+ * @property {String} permission - Quyền của lệnh "owner" | "admin" | "everyone"
  * @property {function} execute - Nơi chứa function chạy của lệnh
  *
  * @example
@@ -25,6 +27,7 @@ interface Run {
  *   name: 'ping',
  *   aliases: ['p'],
  *   groups: "All",
+ *   permission: "everyone",
  *   execute: async(api, event, args) => {
  *     api.sendMessage('pong', event.threadID, event.messageID);
  *   }

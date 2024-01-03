@@ -13,8 +13,9 @@ export const command: Command = {
 
     const idToUpdate = event.threadID; // Thay id cụ thể bạn muốn cập nhật
     const newPrefix = args[0]; // Thay giá trị mới của prefix
+    const config = await configs.findById(idToUpdate); // Tìm kiếm config của id đã chọn trước đó
 
-    if(await !configs.findById(idToUpdate)) new configs({
+    if(!config) new configs({
       _id: idToUpdate,
       prefix: newPrefix
     }).save();
