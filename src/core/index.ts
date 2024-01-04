@@ -2,8 +2,8 @@ import { loadingAnimation, doneAnimation, errAnimation } from "./module/console.
 import "dotenv/config";
 
 // const fbchat = require("facebook-chat-api")
-// import fbchat from "@xaviabot/fca-unofficial";
-import fbchat from "nhatcoder-fb-api";
+import fbchat from "@xaviabot/fca-unofficial";
+// import fbchat from "nhatcoder-fb-api";
 import fs from "fs";
 
 import { Collection } from "@discordjs/collection";
