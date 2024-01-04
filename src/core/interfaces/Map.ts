@@ -203,6 +203,7 @@ export interface event {
 		mentions: {},
 		timestamp: number
 	},
+	author: string,
 	logMessageData: any,
 	logMessageType: string,
 	(name: any): any,
