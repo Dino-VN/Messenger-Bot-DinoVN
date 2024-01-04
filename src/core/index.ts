@@ -21,44 +21,52 @@ const CommandFiles = fs
   .filter((file) => file.endsWith(".ts"));
 
 for (const file of CommandFiles) {
-  import(`../commands/${file}`).then(command => {
-    command = command.command;
-    // const command = require(`../commands/${file}`).command;
-    // console.log(command)
-    if (!command || !command.name || !command.execute)
-      console.error(`Hãy khiểm tra lại lệnh ${file}`);
-    else {
-      commands.set(command.name, command);
-  
-      if (command.aliases.length !== 0) {
-        command.aliases.forEach((alias: any) => {
-          aliases.set(alias, command);
-        });
+  try {
+    import(`../commands/${file}`).then(command => {
+      command = command.command;
+      // const command = require(`../commands/${file}`).command;
+      // console.log(command)
+      if (!command || !command.name || !command.execute)
+        console.error(`Hãy khiểm tra lại lệnh ${file}`);
+      else {
+        commands.set(command.name, command);
+    
+        if (command.aliases.length !== 0) {
+          command.aliases.forEach((alias: any) => {
+            aliases.set(alias, command);
+          });
+        }
       }
-    }
-  })
+    })
+  } catch (error) {
+    console.error(`Lỗi khi load lệnh ${file}:`, error)
+  }
 }
 
 const eventFiles = fs
   .readdirSync("./src/events")
   .filter((file) => file.endsWith(".ts"));
 for (const file of eventFiles) {
-  import(`../events/${file}`).then(event => {
-    // const event = require(`../events/${file}`).event;
-    event = event.event;
-    if (!event || !event.name || !event.execute) console.error(`Hãy khiểm tra lại event ${file}`);
-    else {
-      event.name.forEach((name: any) => {
-        // console.log(name)
-        // if(event.type == name) event.execute(api, event)
-        if (!events.has(file)) {
-          events.set(file, new Collection<string, Event>());
-        }
-        const eventfile = events.get(file)
-        eventfile!.set(name, event);
-      });
-    }
-  });
+  try {
+    import(`../events/${file}`).then(event => {
+      // const event = require(`../events/${file}`).event;
+      event = event.event;
+      if (!event || !event.name || !event.execute) console.error(`Hãy khiểm tra lại event ${file}`);
+      else {
+        event.name.forEach((name: any) => {
+          // console.log(name)
+          // if(event.type == name) event.execute(api, event)
+          if (!events.has(file)) {
+            events.set(file, new Collection<string, Event>());
+          }
+          const eventfile = events.get(file)
+          eventfile!.set(name, event);
+        });
+      }
+    });
+  } catch (error) {
+    console.error(`Lỗi khi load event ${file}:`, error)
+  }
 }
 
 let restartCount = 0
@@ -139,18 +147,30 @@ function startBot() {
 
       console.info(`Đã kết nối với ${user[userId].name} (${userId})`)
 
+      console.info(`Đã load ${commands.size} lệnh`)
+      console.info(`Đã load ${events.size} lệnh`)
+
+      let NfunctionFile = 0
+
       const functionFiles = fs
         .readdirSync("./src/functions")
         .filter((file) => file.endsWith(".ts"));
       for (const file of functionFiles) {
-        let functionFile = await import(`../functions/${file}`);
-        functionFile = functionFile.functionFile;
-        // const functionFile = require(`../functions/${file}`).functionFile;
-        if (!functionFile || !functionFile.execute) console.error(`Hãy khiểm tra lại function ${file}`);
-        else {
-          functionFile.execute(api)
+        try {
+          let functionFile = await import(`../functions/${file}`);
+          functionFile = functionFile.functionFile;
+          // const functionFile = require(`../functions/${file}`).functionFile;
+          if (!functionFile || !functionFile.execute) console.error(`Hãy khiểm tra lại function ${file}`);
+          else {
+            functionFile.execute(api)
+            NfunctionFile++
+          }
+        } catch (error) {
+          console.error(`Lỗi khi load function ${file}:`, error)
         }
       }
+
+      console.info(`Đã load ${NfunctionFile} functions file`)
 
       api.uptime = Date.now();
 
