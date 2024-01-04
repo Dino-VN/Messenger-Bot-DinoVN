@@ -148,7 +148,7 @@ function startBot() {
       console.info(`Đã kết nối với ${user[userId].name} (${userId})`)
 
       console.info(`Đã load ${commands.size} lệnh`)
-      console.info(`Đã load ${events.size} lệnh`)
+      console.info(`Đã load ${events.size} events`)
 
       let NfunctionFile = 0
 
