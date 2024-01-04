@@ -97,7 +97,7 @@ export interface api {
    * });
 	 * ```
 	 */
-	getUserId(name: string, callback: (err: any, obj: any[]) => void): any;
+	getUserId(name: string, callback?: (err: any, obj: any[]) => void): any;
 	/**
 	 * Lấy thông tin người dùng từ id người dùng
 	 * @param ids Array id người dùng muốn lấy
@@ -117,7 +117,7 @@ export interface api {
 	 */
 	getUserInfo(ids: string[], callback?: ((err: any, obj: UserInfo[]) => void)): UserInfo[];
 	addUserToGroup(userID: string, threadID: string, callback?: ((err: any) => void)): any;
-	changeAdminStatus(threadID: string, adminIDs: string | string[], adminStatus: boolean, callback: ((err: any) => void)): any
+	changeAdminStatus(threadID: string, adminIDs: string | string[], adminStatus: boolean, callback?: ((err: any) => void)): any
 	getThreadInfo(threadID: string, callback?: ((err: any, info: ThreadInfo) => void)): ThreadInfo;
 	getThreadList(limit: number, timestamp?: number | null, tags?: string[], callback?: ((err: any, list: {
 		threadID: string,
@@ -203,5 +203,7 @@ export interface event {
 		mentions: {},
 		timestamp: number
 	},
+	logMessageData: any,
 	logMessageType: string,
+	(name: any): any,
 }
