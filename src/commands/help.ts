@@ -31,7 +31,7 @@ export const command: Command = {
             name: command.name,
             aliases: command.aliases,
             description: command.description || "none",
-            prefix: command.prefix
+            prefix: command.noPrefix
             // example: command.example,
             // cooldown: command.cooldown,
             // isGroup: command.isGroup,
