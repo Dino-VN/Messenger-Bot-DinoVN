@@ -39,13 +39,15 @@ export const command: Command = {
         }
       }
     }
+
+    let prefix = await getPrefix(api, event, event.threadID)
     
     try {
       const help =
         `Những lệnh hiện có ${event.isGroup && ThreadInfo.threadName != null? `trong \`${ThreadInfo.threadName}\`` : "của bot"}:\n` +
         commands.map(
-          async (command) =>
-            `${!command.prefix ? await getPrefix(api, event, event.threadID) : ""}${command.name} ${
+          (command) =>
+            `${!command.prefix ? prefix : ""}${command.name} ${
               command.aliases.length == 0
                 ? ""
                 : "[" +
