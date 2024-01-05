@@ -63,7 +63,7 @@ export const event: Event = {
     let command = commands.get(cmd) || aliases.get(cmd);
 
     if (!command) return;
-    if (command.noPrefix && !event.body.startsWith(perfix)) return
+    if (!command.noPrefix && !event.body.startsWith(perfix)) return
 
     // console.log(api.cooldowns)
 
