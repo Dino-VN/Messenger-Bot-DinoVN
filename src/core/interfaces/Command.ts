@@ -42,6 +42,7 @@ export interface Command {
   description?: string;
   /** Tên của lệnh phụ */
   aliases?: string[];
+  noPrefix?: boolean;
   /** Nhóm mà lệnh sẽ chạy `all` để cho dùng trong tất cả các nhóm.\
    * Vd 1: `"All"` - chạy trong tất cả các nhóm và chat riêng\
    * Vd 2: `"Groups"` - chạy trong tất cả các nhóm\

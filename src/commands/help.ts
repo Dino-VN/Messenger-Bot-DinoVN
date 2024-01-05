@@ -1,5 +1,6 @@
 import { Command } from "../core/interfaces";
 import fs from "fs";
+import { getPrefix } from "../core/module/prefix.ts";
 
 export const command: Command = {
   name: "help",
@@ -30,6 +31,7 @@ export const command: Command = {
             name: command.name,
             aliases: command.aliases,
             description: command.description || "none",
+            prefix: command.prefix
             // example: command.example,
             // cooldown: command.cooldown,
             // isGroup: command.isGroup,
@@ -43,7 +45,7 @@ export const command: Command = {
         `Những lệnh hiện có ${event.isGroup && ThreadInfo.threadName != null? `trong \`${ThreadInfo.threadName}\`` : "của bot"}:\n` +
         commands.map(
           (command) =>
-            `${process.env.BOT_PERFIX}${command.name} ${
+            `${!command.prefix ? getPrefix(api, event, event.threadID) : ""}${command.name} ${
               command.aliases.length == 0
                 ? ""
                 : "[" +
