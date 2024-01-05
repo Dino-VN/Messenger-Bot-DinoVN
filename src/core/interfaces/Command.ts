@@ -42,6 +42,7 @@ export interface Command {
   description?: string;
   /** Tên của lệnh phụ */
   aliases?: string[];
+  /** Cho phép chạy lệnh không prefix */
   noPrefix?: true | false;
   /** Nhóm mà lệnh sẽ chạy `all` để cho dùng trong tất cả các nhóm.\
    * Vd 1: `"All"` - chạy trong tất cả các nhóm và chat riêng\

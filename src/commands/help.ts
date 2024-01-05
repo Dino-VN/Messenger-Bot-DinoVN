@@ -44,8 +44,8 @@ export const command: Command = {
       const help =
         `Những lệnh hiện có ${event.isGroup && ThreadInfo.threadName != null? `trong \`${ThreadInfo.threadName}\`` : "của bot"}:\n` +
         commands.map(
-          (command) =>
-            `${!command.prefix ? getPrefix(api, event, event.threadID) : ""}${command.name} ${
+          async (command) =>
+            `${!command.prefix ? await getPrefix(api, event, event.threadID) : ""}${command.name} ${
               command.aliases.length == 0
                 ? ""
                 : "[" +
