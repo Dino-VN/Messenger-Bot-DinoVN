@@ -101,7 +101,7 @@ function loadMqtt(api: api) {
   setTimeout(() => {
     event.stopListening()
     loadMqtt(api)
-  }, 1 * 60 * 60 * 1000)
+  }, 3 * 60 * 60 * 1000)
 }
 
 function startBot() {
