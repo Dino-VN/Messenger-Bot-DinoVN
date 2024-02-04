@@ -80,6 +80,7 @@ export interface api {
 	 * Lấy Id của tài khoản hiện tại đang login thôi
 	 */
 	getCurrentUserID(): string;
+	editMessage(text: string, messageID: string, callback?: ((err: any) => void)): any;
 	listenMqtt(callback: ((err: any, event: any) => void)): any;
 	/**
 	 * Tìm thông tin người dùng từ tên
