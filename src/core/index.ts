@@ -145,7 +145,7 @@ function startBot() {
       const userId = api.getCurrentUserID()
       const user = await api.getUserInfo([userId])
 
-      console.info(`Đã kết nối với ${user[userId].name} (${userId})`)
+      console.info(`Đã kết nối với ${user[userId] ? user[userId].name : null} (${userId})`)
 
       console.info(`Đã load ${commands.size} lệnh`)
       console.info(`Đã load ${events.size} events`)
