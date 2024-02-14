@@ -1,5 +1,6 @@
 import { aliases, commands, cooldowns, events } from "..";
 import { ReadStream } from "fs";
+import { BotAPI } from "../module/api.ts";
 
 //facebook-comment-api
 interface FbApi {
@@ -57,8 +58,10 @@ export interface api {
 	aliases: typeof aliases
 	cooldowns: typeof cooldowns
 	events: typeof events
-	serverInstance: any,
 	uptime: number,
+
+	// API tự thêm
+	BotAPI: typeof BotAPI,
 
 	// fb: FbApi,
 	/**
@@ -151,6 +154,11 @@ export interface api {
 	 */
 	sendMessage(message: string | {
 		body?: string,
+		mentions?: {
+			tag: string,
+			id: string,
+			fromIndex: number,
+		}[],
 		attachment?: ReadStream,
 	}, threadID: string, callback?: ((err: any, messageInfo: event) => void) | string, messageID?: string): any;
 	sendTypingIndicator(threadID: string, callback?: ((err: any) => void)): any;
@@ -188,7 +196,7 @@ export interface event {
 	args: string[],
 	body: string,
 	messageID: string,
-	attachments: [],
+	attachments: any[],
 	mentions: object,
 	timestamp: number,
 	isGroup: boolean,

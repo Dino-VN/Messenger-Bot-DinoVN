@@ -1,16 +1,17 @@
 {
-  "name": "lifesave-bot",
+  "name": "messenger-bot",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "type": "module",
+  "repository": "https://github.com/Dino-VN/Messenger-Bot-DinoVN",
   "scripts": {
     "start": "npx tsx ./src/index.ts",
     "start:core": "npx tsx ./src/core/index.ts",
     "start:dev": "npx nodemon"
   },
   "keywords": [],
-  "author": "",
+  "author": "Dino-VN",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.17",

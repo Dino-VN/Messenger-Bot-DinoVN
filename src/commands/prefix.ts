@@ -1,5 +1,5 @@
 import { Command } from '../core/interfaces';
-import { configs } from '../core/module/data';
+import { guilds, users } from '../core/module/data';
 
 export const command: Command = {
   name: 'prefix',
@@ -13,13 +13,24 @@ export const command: Command = {
 
     const idToUpdate = event.threadID; // Thay id cụ thể bạn muốn cập nhật
     const newPrefix = args[0]; // Thay giá trị mới của prefix
-    const config = await configs.findById(idToUpdate); // Tìm kiếm config của id đã chọn trước đó
 
-    if(!config) new configs({
-      _id: idToUpdate,
-      prefix: newPrefix
-    }).save();
-    else await configs.findByIdAndUpdate(idToUpdate, {prefix: newPrefix}); // Cập nhật giá trị prefix mới cho id đã chọn trước đó
+    if(event.isGroup) {
+      const guild = await guilds.findById(idToUpdate); // Tìm kiếm config của id đã chọn trước đó
+
+      if(!guild) new guilds({
+        _id: idToUpdate,
+        prefix: newPrefix
+      }).save();
+      else await guilds.findByIdAndUpdate(idToUpdate, {prefix: newPrefix}); // Cập nhật giá trị prefix mới cho id đã chọn trước đó
+    } else {
+      const user = await users.findById(idToUpdate); // Tìm kiếm config của id đã chọn trước đó
+
+      if(!user) new users({
+        _id: idToUpdate,
+        prefix: newPrefix
+      }).save();
+      else await users.findByIdAndUpdate(idToUpdate, {prefix: newPrefix}); // Cập nhật giá trị prefix mới cho id đã chọn trước đó
+    }
   
     console.log(`Đã cập nhật giá trị prefix (${newPrefix}) cho id ${idToUpdate}`);
     api.sendMessage(`Đã cập lưu prefix mới: \`${newPrefix}\``, event.threadID, event.messageID);

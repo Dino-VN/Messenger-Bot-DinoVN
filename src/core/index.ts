@@ -69,6 +69,32 @@ for (const file of eventFiles) {
   }
 }
 
+const core_eventFiles = fs
+  .readdirSync("./src/core/events")
+  .filter((file) => file.endsWith(".ts"));
+for (const file of core_eventFiles) {
+  try {
+    import(`./events/${file}`).then(event => {
+      // const event = require(`../events/${file}`).event;
+      event = event.event;
+      if (!event || !event.name || !event.execute) console.error(`Lỗi khi load core event ${file} hãy báo lỗi trên github`);
+      else {
+        event.name.forEach((name: any) => {
+          // console.log(name)
+          // if(event.type == name) event.execute(api, event)
+          if (!events.has(file)) {
+            events.set("core_" + file, new Collection<string, Event>());
+          }
+          const eventfile = events.get("core_" + file)
+          eventfile!.set(name, event);
+        });
+      }
+    });
+  } catch (error) {
+    console.error(`Lỗi khi load event ${file}:`, error)
+  }
+}
+
 let restartCount = 0
 
 function handleRestartCount() {
@@ -151,6 +177,24 @@ function startBot() {
       console.info(`Đã load ${events.size} events`)
 
       let NfunctionFile = 0
+
+      const core_functionFiles = fs
+        .readdirSync("./functions")
+        .filter((file) => file.endsWith(".ts"));
+      for (const file of core_functionFiles) {
+        try {
+          let functionFile = await import(`./functions/${file}`);
+          functionFile = functionFile.functionFile;
+          // const functionFile = require(`../functions/${file}`).functionFile;
+          if (!functionFile || !functionFile.execute) console.error(`Lỗi khi load core function ${file} hãy báo lỗi trên github`);
+          else {
+            functionFile.execute(api)
+            NfunctionFile++
+          }
+        } catch (error) {
+          console.error(`Lỗi khi load core function ${file} hãy báo lỗi trên github:`, error);
+        }
+      }
 
       const functionFiles = fs
         .readdirSync("./src/functions")
