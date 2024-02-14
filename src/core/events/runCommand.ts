@@ -24,9 +24,8 @@ async function runCommand(
     const ThreadInfo = await api.getThreadInfo(bot_event.threadID);
     // console.log(api.getCurrentUserID())
     if (
-      (ThreadInfo.adminIDs.includes(api.getCurrentUserID()) &&
-        ThreadInfo.adminIDs.includes(bot_event.senderID)) ||
-      (api.config.ADMIN_BYPASS && bot_event.senderID == api.config.OWNER_ID)
+      !ThreadInfo.adminIDs.includes(bot_event.senderID) ||
+      (!api.config.ADMIN_BYPASS && bot_event.senderID == api.config.OWNER_ID)
     )
       return api.sendMessage(
         "Bạn không phải là quản trị viên nên không thể sử dụng lệnh này",
@@ -35,9 +34,8 @@ async function runCommand(
       );
 
     if (
-      (!ThreadInfo.adminIDs.includes(api.getCurrentUserID()) &&
-        ThreadInfo.adminIDs.includes(bot_event.senderID)) ||
-      (api.config.BOT_ADMIN_BYPASS && bot_event.senderID == api.config.OWNER_ID)
+      !ThreadInfo.adminIDs.includes(api.getCurrentUserID()) ||
+      (!api.config.BOT_ADMIN_BYPASS && bot_event.senderID == api.config.OWNER_ID)
     )
       return api.sendMessage(
         `Bot không phải là quản trị viên! trong nhóm \`${ThreadInfo.threadName}\`(${ThreadInfo.threadID})`,
