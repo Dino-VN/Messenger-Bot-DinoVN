@@ -82,10 +82,11 @@ for (const file of core_eventFiles) {
         event.name.forEach((name: any) => {
           // console.log(name)
           // if(event.type == name) event.execute(api, event)
-          if (!events.has(file)) {
-            events.set("core_" + file, new Collection<string, Event>());
+          let fileName = "core_" + file
+          if (!events.has(fileName)) {
+            events.set(fileName, new Collection<string, Event>());
           }
-          const eventfile = events.get("core_" + file)
+          const eventfile = events.get(fileName)
           eventfile!.set(name, event);
         });
       }
