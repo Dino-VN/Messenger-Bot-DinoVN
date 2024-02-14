@@ -119,7 +119,7 @@ export interface api {
    * });
 	 * ```
 	 */
-	getUserInfo(ids: string[], callback?: ((err: any, obj: UserInfo[]) => void)): UserInfo[];
+	getUserInfo(ids: string | string[], callback?: ((err: any, obj: UserInfo[]) => void)): UserInfo[];
 	addUserToGroup(userID: string, threadID: string, callback?: ((err: any) => void)): any;
 	changeAdminStatus(threadID: string, adminIDs: string | string[], adminStatus: boolean, callback?: ((err: any) => void)): any
 	getThreadInfo(threadID: string, callback?: ((err: any, info: ThreadInfo) => void)): ThreadInfo;

@@ -179,7 +179,7 @@ function startBot() {
       let NfunctionFile = 0
 
       const core_functionFiles = fs
-        .readdirSync("./functions")
+        .readdirSync("./src/core/functions")
         .filter((file) => file.endsWith(".ts"));
       for (const file of core_functionFiles) {
         try {
