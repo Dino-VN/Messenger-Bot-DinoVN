@@ -136,6 +136,7 @@ function startBot() {
     if (process.send) process.send("stop")
     return 
   }
+
   let loading = loadingAnimation("Đang kết nối với Facebook...");
   
   fbchat(
@@ -194,6 +195,17 @@ function startBot() {
         } catch (error) {
           console.error(`Lỗi khi load core function ${file} hãy báo lỗi trên github:`, error);
         }
+      }
+
+      try {
+        // @ts-ignore
+        import("../../bot.config.js").then(config => {
+          api.config = config;
+        })
+      } catch (error) {
+        console.error("Lỗi khi load bot.config.js hãy kiểm tra lại file config", error)
+        if (process.send) process.send("stop")
+        return
       }
 
       const functionFiles = fs

@@ -52,6 +52,16 @@ interface UserInfo {
 	alternateName: string,
 }
 
+interface Config {
+	OWNER_ID: string,
+	ADMIN_BYPASS: boolean,
+  BOT_ADMIN_BYPASS: boolean,
+  PERFIX: string,
+  TIMEZONE: string,
+  UPTIME: boolean,
+	PORT?: number,
+}
+
 export interface api {
 	//Custom
 	commands: typeof commands
@@ -62,6 +72,7 @@ export interface api {
 
 	// API tự thêm
 	BotAPI: typeof BotAPI,
+	config: Config,
 
 	// fb: FbApi,
 	/**

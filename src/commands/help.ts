@@ -25,7 +25,7 @@ export const command: Command = {
           command.permission == "admin" &&
           ThreadInfo.adminIDs.includes(event.senderID) ||
           command.permission == "owner" &&
-          event.senderID == process.env.OWNER_ID
+          event.senderID == api.config.OWNER_ID
         ) {
           commands.push({
             name: command.name,

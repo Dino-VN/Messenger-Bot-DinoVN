@@ -3,14 +3,14 @@ import express from "express";
 
 export const functionFile: Function = {
 	execute(api) {
-		if(!process.env.UPTIME) return
+		if(api.config.UPTIME) return
 		const app = express();
 
 		app.all("/", (req, res) => {
 			res.send("Ok")
 		})
 
-		const PORT = process.env.SERVER_PORT || process.env.PORT || 3000
+		const PORT = api.config.PORT || process.env.SERVER_PORT || 3000
 
 		app.listen(PORT, () => {
 			console.info("Chạy web uptime thành công ở port: " + PORT);

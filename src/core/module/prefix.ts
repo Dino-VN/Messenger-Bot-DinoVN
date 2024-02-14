@@ -11,7 +11,7 @@ export async function getPrefix(api: api, event: event, id: string) {
   if(event.isGroup) result = await guilds.findById(idToFind)
   else result = await users.findById(idToFind)
 
-  if(!result) return "!"
+  if(!result) return api.config.PERFIX || "!"
 
-  return result!.prefix || "!"
+  return result!.prefix || api.config.PERFIX || "!"
 }

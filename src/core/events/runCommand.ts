@@ -1,8 +1,9 @@
 import { Collection } from "@discordjs/collection";
-import { Command, Event } from "../core/interfaces/index.ts";
+import { Command, Event } from "../interfaces/index.ts";
 import fs from "fs";
-import { aliases, commands } from "../core/index.ts";
-import { getPrefix } from "../core/module/prefix.ts";
+import { aliases, commands } from "../index.ts";
+import { getPrefix } from "../module/prefix.ts";
+import { api } from "../interfaces/Map.ts";
 
 const requestCountTime = 2;
 
@@ -13,7 +14,7 @@ function urlify(text: string): RegExpMatchArray | null {
 
 async function runCommand(
   command: Command,
-  api: any,
+  api: api,
   bot_event: any,
   args: string[]
 ) {
@@ -23,26 +24,29 @@ async function runCommand(
     const ThreadInfo = await api.getThreadInfo(bot_event.threadID);
     // console.log(api.getCurrentUserID())
     if (
-      !ThreadInfo.adminIDs.includes(api.getCurrentUserID()) &&
-      ThreadInfo.adminIDs.includes(bot_event.senderID)
+      (ThreadInfo.adminIDs.includes(api.getCurrentUserID()) &&
+        ThreadInfo.adminIDs.includes(bot_event.senderID)) ||
+      (api.config.ADMIN_BYPASS && bot_event.senderID == api.config.OWNER_ID)
+    )
+      return api.sendMessage(
+        "Bạn không phải là quản trị viên nên không thể sử dụng lệnh này",
+        bot_event.threadID,
+        bot_event.messageID
+      );
+
+    if (
+      (!ThreadInfo.adminIDs.includes(api.getCurrentUserID()) &&
+        ThreadInfo.adminIDs.includes(bot_event.senderID)) ||
+      (api.config.BOT_ADMIN_BYPASS && bot_event.senderID == api.config.OWNER_ID)
     )
       return api.sendMessage(
         `Bot không phải là quản trị viên! trong nhóm \`${ThreadInfo.threadName}\`(${ThreadInfo.threadID})`,
         bot_event.senderID
       );
-    if (
-      ThreadInfo.adminIDs.includes(api.getCurrentUserID()) &&
-      ThreadInfo.adminIDs.includes(bot_event.senderID)
-    )
-      (command as Command).execute(api, bot_event, args);
-    else
-      api.sendMessage(
-        "Bạn không phải là quản trị viên nên không thể sử dụng lệnh này",
-        bot_event.threadID,
-        bot_event.messageID
-      );
+
+    (command as Command).execute(api, bot_event, args);
   } else if ((command as Command).permission == "owner") {
-    if (bot_event.senderID == process.env.OWNER_ID)
+    if (bot_event.senderID == api.config.OWNER_ID)
       (command as Command).execute(api, bot_event, args);
   }
 }
@@ -53,8 +57,9 @@ export const event: Event = {
     const perfix: string =
       (await getPrefix(api, event, event.threadID)) || process.env.BOT_PERFIX!;
     if (!api.cooldowns) return;
-    let args = []
-    if (event.body.startsWith(perfix)) args = event.body.slice(perfix.length).trim().split(/\s|\n/);
+    let args = [];
+    if (event.body.startsWith(perfix))
+      args = event.body.slice(perfix.length).trim().split(/\s|\n/);
     else args = event.body.trim().split(/\s|\n/);
 
     const cmd = args.shift()!.toLowerCase();
@@ -63,7 +68,7 @@ export const event: Event = {
     let command = commands.get(cmd) || aliases.get(cmd);
 
     if (!command) return;
-    if (!command.noPrefix && !event.body.startsWith(perfix)) return
+    if (!command.noPrefix && !event.body.startsWith(perfix)) return;
 
     // console.log(api.cooldowns)
 
@@ -119,8 +124,7 @@ export const event: Event = {
     // console.log(api)
     if (typeof (command as Command).groups === "string") {
       const vgroup = (command as Command).groups as string;
-      if (vgroup.toLowerCase() == "all")
-        runCommand(command, api, event, args);
+      if (vgroup.toLowerCase() == "all") runCommand(command, api, event, args);
       if (vgroup.toLowerCase() == "groups" && event.isGroup)
         runCommand(command, api, event, args);
     } else if (Array.isArray((command as Command).groups)) {
