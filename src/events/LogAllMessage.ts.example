@@ -1,0 +1,8 @@
+import { Command } from "../interfaces/index.ts";
+
+export const event: Event = {
+  name: ["message", "message_reply"],
+  async execute(api, event) {
+    console.log(event)
+  },
+};
