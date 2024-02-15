@@ -204,7 +204,7 @@ async function startBot() {
       try {
         // @ts-ignore
         import("../../bot.config.js").then(config => {
-          api.config = config;
+          api.config = config.default;
         })
       } catch (error) {
         console.error("Lỗi khi load bot.config.js hãy kiểm tra lại file config", error)
