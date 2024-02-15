@@ -73,6 +73,7 @@ export interface api {
 	// API tự thêm
 	BotAPI: typeof BotAPI,
 	config: Config,
+	global: any;
 
 	// fb: FbApi,
 	/**
