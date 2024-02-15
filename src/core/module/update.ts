@@ -77,7 +77,7 @@ export function checkUpdate(callback: Function) {
           if (answer.confirm) {
             // Thực hiện pull về
             try {
-              execSync('git pull', { stdio: 'inherit', cwd: localRepoPath });
+              execSync('git pull public Core', { stdio: 'inherit', cwd: localRepoPath });
               console.info('Đã tải về update thành công.');
               updatePackage(callback);
             } catch (error) {
