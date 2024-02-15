@@ -76,9 +76,14 @@ export function checkUpdate(callback: Function) {
 
           if (answer.confirm) {
             // Thực hiện pull về
-            execSync('git pull', { stdio: 'inherit', cwd: localRepoPath });
-            console.info('Đã tải về update thành công.');
-            updatePackage(callback);
+            try {
+              execSync('git pull', { stdio: 'inherit', cwd: localRepoPath });
+              console.info('Đã tải về update thành công.');
+              updatePackage(callback);
+            } catch (error) {
+              console.error('Lỗi khi khi update hãy update thủ công:', error);
+              callback();
+            }
           } else {
             console.info('Bỏ qua update.');
             callback();
