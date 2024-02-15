@@ -7,6 +7,11 @@ import { api } from "../interfaces/Map.ts";
 
 const requestCountTime = 2;
 
+function urlify(text: string): RegExpMatchArray | null {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.match(urlRegex);
+}
+
 async function runCommand(
   command: Command,
   api: api,

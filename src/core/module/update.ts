@@ -1,6 +1,7 @@
 import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
+import inquirer from 'inquirer';
 
 const localRepoPath = './';  // Đường dẫn đến thư mục của dự án
 const remoteName = 'public';
@@ -20,46 +21,75 @@ function addGitRemote() {
   }
 }
 
-export function checkUpdate() {
-  if (!isGitClone()) {
-    console.warn('Không phải là git clone, bỏ qua kiểm tra update');
-    return;
+function updatePackage(callback: Function) {
+  if (fs.existsSync(path.join(localRepoPath, 'pnpm-lock.yaml'))) {
+    console.info('Đang cài đặt các package mới...');
+    execSync('pnpm install', { stdio: 'inherit', cwd: localRepoPath });
+  } else if (fs.existsSync(path.join(localRepoPath, 'yarn.lock'))) {
+    console.info('Đang cài đặt các package mới...');
+    execSync('yarn install', { stdio: 'inherit', cwd: localRepoPath });
+  } else {
+    console.info('Đang cài đặt các package mới...');
+    execSync('npm install', { stdio: 'inherit', cwd: localRepoPath });
   }
+  if (process.send) process.send("restart")
+  callback();
+}
 
-  // Kiểm tra xem remote đã được thêm chưa
-  const remoteList = execSync('git remote', { encoding: 'utf-8', cwd: localRepoPath }).trim().split('\n');
-  
-  if (!remoteList.includes(remoteName)) {
-    // console.log(`Remote '${remoteName}' chưa được thêm.`);
-    addGitRemote();
-  }
+export function checkUpdate(callback: Function) {
+    if (!isGitClone()) {
+      console.warn('Không phải là git clone, bỏ qua kiểm tra update');
+      callback();
+      return;
+    } else console.info("Đang kiểm tra update");
 
-  try {
-    // Lấy danh sách commit mới từ remote repository
-    execSync(`git remote prune ${remoteName}`, { stdio: 'inherit', cwd: localRepoPath });
-    execSync(`git fetch ${remoteName}`, { stdio: 'inherit', cwd: localRepoPath });
+    // Kiểm tra xem remote đã được thêm chưa
+    const remoteList = execSync('git remote', { encoding: 'utf-8', cwd: localRepoPath }).trim().split('\n');
 
-    // Xem danh sách commit mới
-    const commitList = execSync(`git log HEAD..${remoteName}/Core --oneline`, { encoding: 'utf-8', cwd: localRepoPath });
-    
-    if (commitList.trim() !== '') {
-      console.log('Có các commit sau:');
-      console.log(commitList);
-
-      // Hỏi người dùng có muốn pull về không
-      const answer = prompt('Bạn có muốn pull về không? (yes/no): ');
-      
-      if (answer.trim().toLowerCase() === 'yes') {
-        // Thực hiện pull về
-        execSync('git pull', { stdio: 'inherit', cwd: localRepoPath });
-        console.log('Đã pull về thành công.');
-      } else {
-        console.log('Bỏ qua pull về.');
-      }
-    } else {
-      console.log('Không có commit mới.');
+    if (!remoteList.includes(remoteName)) {
+      // console.log(`Remote '${remoteName}' chưa được thêm.`);
+      addGitRemote();
     }
-  } catch (error) {
-    console.error('Lỗi khi kiểm tra và pull:', error);
-  }
+
+    try {
+      // Lấy danh sách commit mới từ remote repository
+      execSync(`git remote prune ${remoteName}`, { stdio: 'inherit', cwd: localRepoPath });
+      execSync(`git fetch ${remoteName}`, { stdio: 'inherit', cwd: localRepoPath });
+
+      // Xem danh sách commit mới
+      const commitList = execSync(`git log HEAD..public/Core --pretty=format:"%C(auto)%h %Cgreen%s%Creset"`, { encoding: 'utf-8', cwd: localRepoPath });
+
+      if (commitList.trim() !== '') {
+        console.info('Có các commit sau:');
+        console.log(commitList);
+
+        // Hỏi người dùng có muốn pull về không
+        const prompt = inquirer.createPromptModule();
+
+        prompt({
+          type: 'confirm',
+          name: 'confirm',
+          message: 'Bạn có muốn update đoạn code mới nhất từ public repo không?',
+          default: false,
+        }).then(answer => {
+          // console.log(answer);
+
+          if (answer.confirm) {
+            // Thực hiện pull về
+            execSync('git pull', { stdio: 'inherit', cwd: localRepoPath });
+            console.info('Đã tải về update thành công.');
+            updatePackage(callback);
+          } else {
+            console.info('Bỏ qua update.');
+            callback();
+          }
+        })
+      } else {
+        console.info('Không có update mới.');
+        callback();
+      }
+    } catch (error) {
+      console.error('Lỗi khi update:', error);
+      callback();
+    }
 }

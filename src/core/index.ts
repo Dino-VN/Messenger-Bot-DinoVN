@@ -10,8 +10,9 @@ import { Collection } from "@discordjs/collection";
 
 import { Command, Cooldown, Event, Function } from "./interfaces/index.ts";
 import { api } from "./interfaces/Map.ts";
-import { checkUpdate } from "./module/update.js";
+// @ts-ignore
 import botConfig from "../../bot.config.js";
+import { checkUpdate } from "./module/update.ts";
 
 const events: Collection<string, Collection<string, Event>> = new Collection();
 const commands: Collection<string, Command> = new Collection();
@@ -133,8 +134,7 @@ function loadMqtt(api: api) {
   }, 3 * 60 * 60 * 1000)
 }
 
-function startBot() {
-  if(botConfig.UPDATE) checkUpdate()
+async function startBot() {
   if(!fs.existsSync("./appstate.json")) {
     console.error("Không tìm thấy appstate.json, hãy tạo mới")
     if (process.send) process.send("stop")
@@ -239,5 +239,7 @@ function startBot() {
   );
 }
 
-startBot();
+if (botConfig.UPDATE) {
+  checkUpdate(() => startBot());
+} else startBot();
 export { events, commands, aliases, cooldowns };
