@@ -10,6 +10,8 @@ import { Collection } from "@discordjs/collection";
 
 import { Command, Cooldown, Event, Function } from "./interfaces/index.ts";
 import { api } from "./interfaces/Map.ts";
+import { checkUpdate } from "./module/update.js";
+import botConfig from "../../bot.config.js";
 
 const events: Collection<string, Collection<string, Event>> = new Collection();
 const commands: Collection<string, Command> = new Collection();
@@ -132,6 +134,7 @@ function loadMqtt(api: api) {
 }
 
 function startBot() {
+  if(botConfig.UPDATE) checkUpdate()
   if(!fs.existsSync("./appstate.json")) {
     console.error("Không tìm thấy appstate.json, hãy tạo mới")
     if (process.send) process.send("stop")

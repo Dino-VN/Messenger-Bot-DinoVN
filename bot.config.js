@@ -10,6 +10,9 @@ export default {
 // ------ Bot Config------
   PERFIX: "!",
   TIMEZONE: "Asia/Ho_Chi_Minh",
+// ------ Update ------
+  UPDATE: true,
+  AUTO_UPDATE: false,
 // ------ Uptime ------
   UPTIME: false,
   // Nếu dùng như kiểu replit thì không cần set PORT
