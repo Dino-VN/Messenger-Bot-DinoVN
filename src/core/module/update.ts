@@ -2,6 +2,7 @@ import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 import inquirer from 'inquirer';
+import botConfig from "../../../bot.config.js";
 
 const localRepoPath = './';  // Đường dẫn đến thư mục của dự án
 const remoteName = 'public';
@@ -36,6 +37,17 @@ function updatePackage(callback: Function) {
   callback();
 }
 
+function updateBot(callback: Function) {
+  try {
+    execSync('git pull public Core', { stdio: 'inherit', cwd: localRepoPath });
+    console.info('Đã tải về update thành công.');
+    updatePackage(callback);
+  } catch (error) {
+    console.error('Lỗi khi khi update hãy update thủ công:', error);
+    callback();
+  }
+}
+
 export function checkUpdate(callback: Function) {
     if (!isGitClone()) {
       console.warn('Không phải là git clone, bỏ qua kiểm tra update');
@@ -63,32 +75,28 @@ export function checkUpdate(callback: Function) {
         console.info('Có các commit sau:');
         console.log(commitList);
 
-        // Hỏi người dùng có muốn pull về không
-        const prompt = inquirer.createPromptModule();
+        if (botConfig.AUTO_UPDATE) updateBot(callback);
+        else {
+          // Hỏi người dùng có muốn pull về không
+          const prompt = inquirer.createPromptModule();
 
-        prompt({
-          type: 'confirm',
-          name: 'confirm',
-          message: 'Bạn có muốn update đoạn code mới nhất từ public repo không?',
-          default: false,
-        }).then(answer => {
-          // console.log(answer);
+          prompt({
+            type: 'confirm',
+            name: 'confirm',
+            message: 'Bạn có muốn update đoạn code mới nhất từ public repo không?',
+            default: false,
+          }).then(answer => {
+            // console.log(answer);
 
-          if (answer.confirm) {
-            // Thực hiện pull về
-            try {
-              execSync('git pull public Core', { stdio: 'inherit', cwd: localRepoPath });
-              console.info('Đã tải về update thành công.');
-              updatePackage(callback);
-            } catch (error) {
-              console.error('Lỗi khi khi update hãy update thủ công:', error);
+            if (answer.confirm) {
+              // Thực hiện pull về
+              updateBot(callback);
+            } else {
+              console.info('Bỏ qua update.');
               callback();
             }
-          } else {
-            console.info('Bỏ qua update.');
-            callback();
-          }
-        })
+          })
+        }
       } else {
         console.info('Không có update mới.');
         callback();
