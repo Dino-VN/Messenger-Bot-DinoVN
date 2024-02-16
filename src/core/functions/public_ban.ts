@@ -15,7 +15,7 @@ export const functionFile: Function = {
         let uid = i.uid
         const reason = i.reason
   
-        const user = users.findById(uid)
+        const user = await users.findById(uid)
         if (!user) {
           const newUser = new users({
             _id: uid,
@@ -24,6 +24,7 @@ export const functionFile: Function = {
           })
           await newUser.save()
         } else {
+          if (user.banned) return
           await users.findByIdAndUpdate(uid, {
             banned: true,
             banReason: reason
