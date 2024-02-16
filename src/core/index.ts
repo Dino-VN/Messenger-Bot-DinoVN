@@ -51,7 +51,7 @@ const core_CommandFiles = fs
   .readdirSync("./src/core/commands")
   .filter((file) => file.endsWith(".ts"));
 
-for (const file of CommandFiles) {
+for (const file of core_CommandFiles) {
   try {
     import(`./commands/${file}`).then(command => {
       command = command.command;
