@@ -2,7 +2,7 @@ import { Function } from "../interfaces/index.ts";
 import fetch from "node-fetch";
 import { users } from "../module/data.ts";
 
-const API = "https://bot.d1n0saur.xyz/ban_list";
+const API = "https://bot.d1n0saur.xyz/api/ban_list";
 
 export const functionFile: Function = {
   async execute(api) {
