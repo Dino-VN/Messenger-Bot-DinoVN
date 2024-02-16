@@ -32,7 +32,11 @@ export const command: Command = {
         banReason: reason
       })
     }
-    
-    return api.sendMessage(`Đã ban ${uid} với lý do: ${reason}`, event.threadID, event.messageID)
+
+    return api.sendMessage(`Đã ban ${uid} với lý do: ${reason}`, event.threadID, (error, message) => {
+      setTimeout(() => {
+        api.unsendMessage(message.messageID)
+      }, 1000 * 10)
+    }, event.messageID)
   }
 }
