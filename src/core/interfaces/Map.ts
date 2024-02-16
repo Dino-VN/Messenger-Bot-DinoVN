@@ -75,6 +75,9 @@ export interface api {
 	BotAPI: typeof BotAPI,
 	config: Config,
 	global: any;
+	/** Danh sách uid của những người bị ban */
+	ban_list: string[],
+
 
 	// fb: FbApi,
 	/**

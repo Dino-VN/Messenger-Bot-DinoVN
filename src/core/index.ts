@@ -13,6 +13,7 @@ import { api } from "./interfaces/Map.ts";
 // @ts-ignore
 import botConfig from "../../bot.config.js";
 import { checkUpdate } from "./module/update.ts";
+import { users } from "./module/data.ts";
 
 const events: Collection<string, Collection<string, Event>> = new Collection();
 const commands: Collection<string, Command> = new Collection();
@@ -146,6 +147,25 @@ function loadMqtt(api: api) {
       return;
     }
 
+    api.ban_list = []
+
+    const local = await users.find({ banned: true })
+    local.forEach(async (user: any) => {
+      if (user.banned) {
+        api.ban_list.push(user.id)
+      }
+    })
+
+    const public_list = await users.find({ public_ban: true })
+    public_list.forEach(async (user: any) => {
+      if (user.public_ban) {
+        api.ban_list.push(user.id)
+      }
+    })
+
+    if (event.senderID && api.ban_list.includes(event.senderID)) return
+    if (event.author && api.ban_list.includes(event.author)) return
+
     // console.log(events)
     events.map(eventfile => {
       let hevent = eventfile.get(event.type);
@@ -202,10 +222,21 @@ async function startBot() {
       const user = await api.getUserInfo([userId])
 
       console.info(`Đã kết nối với ${user[userId] ? user[userId].name : null} (${userId})`)
+      
+      try {
+        // @ts-ignore
+        import("../../bot.config.js").then(config => {
+          api.config = config.default;
+        })
+      } catch (error) {
+        console.error("Lỗi khi load bot.config.js hãy kiểm tra lại file config", error)
+        if (process.send) process.send("stop")
+        return
+      }
 
       console.info(`Đã load ${commands.size} lệnh`)
       console.info(`Đã load ${events.size} events`)
-
+      
       let NfunctionFile = 0
 
       const core_functionFiles = fs
@@ -224,17 +255,6 @@ async function startBot() {
         } catch (error) {
           console.error(`Lỗi khi load core function ${file} hãy báo lỗi trên github:`, error);
         }
-      }
-
-      try {
-        // @ts-ignore
-        import("../../bot.config.js").then(config => {
-          api.config = config.default;
-        })
-      } catch (error) {
-        console.error("Lỗi khi load bot.config.js hãy kiểm tra lại file config", error)
-        if (process.send) process.send("stop")
-        return
       }
 
       const functionFiles = fs

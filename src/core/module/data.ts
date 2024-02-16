@@ -10,6 +10,7 @@ const users = model("users", new Schema({
   prefix: String,
   token: String,
   banned: Boolean,
+  public_ban: Boolean,
   banReason: String,
 }))
 
