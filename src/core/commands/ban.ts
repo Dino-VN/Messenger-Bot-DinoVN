@@ -9,12 +9,17 @@ export const command: Command = {
   permission: "owner",
   execute: async(api, event, args) => {
     let uid = "0"
+    let reason = "Không có lý do"
  
-    if(args[0]) uid = args[0]
-    else if(event.messageReply) uid = event.messageReply.senderID
-
-    if (!args[1]) return api.sendMessage("Vui lòng nhập lý do ban", event.threadID, event.messageID)
-    const reason = args.slice(1).join(" ")
+    if(event.messageReply) {
+      uid = event.messageReply.senderID
+      if (!args[0]) return api.sendMessage("Vui lòng nhập lý do ban", event.threadID, event.messageID)
+      reason = args.join(" ")
+    } else if(args[0]) {
+      uid = args[0]
+      if (!args[1]) return api.sendMessage("Vui lòng nhập lý do ban", event.threadID, event.messageID)
+      reason = args.slice(1).join(" ")
+    }
 
     if(uid == "0") return api.sendMessage("Vui lòng nhập ID/Reply người dùng cần ban", event.threadID, event.messageID)
 
