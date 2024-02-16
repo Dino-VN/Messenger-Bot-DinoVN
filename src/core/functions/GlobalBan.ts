@@ -2,7 +2,29 @@ import { Function } from "../interfaces/index.ts";
 import fetch from "node-fetch";
 import { users } from "../module/data.ts";
 
+const colors = {
+  reset: "\x1B[0m",
+  black: "\x1B[30m",
+  red: "\x1B[31m",
+  green: "\x1B[32m",
+  yellow: "\x1B[33m",
+  blue: "\x1B[34m",
+  magenta: "\x1B[35m",
+  cyan: "\x1B[36m",
+  white: "\x1B[37m",
+  gray: "\x1B[90m",
+  brightBlack: "\x1B[90m",
+  brightRed: "\x1B[91m",
+  brightGreen: "\x1B[92m",
+  brightYellow: "\x1B[93m",
+  brightBlue: "\x1B[94m",
+  brightMagenta: "\x1B[95m",
+  brightCyan: "\x1B[96m",
+  brightWhite: "\x1B[97m",
+};
+
 const API = "https://bot.d1n0saur.xyz/api/ban_list";
+let PREFIX = `${colors.red}[Global Ban]${colors.reset}`;
 
 export const functionFile: Function = {
   async execute(api) {
@@ -24,7 +46,7 @@ export const functionFile: Function = {
         users_not_in_data.forEach(async (uid: string) => {
           if (!public_ban.find((u: any) => u.uid === uid)?.banned) users.findByIdAndUpdate(uid, { public_ban: false, banReason: "" })
           else users.findByIdAndUpdate(uid, { public_ban: false })
-          console.info(`[PUBLIC_BAN] ${uid} đã được đưa ra khỏi danh sách ban`)
+          console.info(`${PREFIX} ${uid} đã được đưa ra khỏi danh sách ban`)
         });
 
         if (!user) {
@@ -34,14 +56,14 @@ export const functionFile: Function = {
             banReason: reason
           })
           await newUser.save()
-          console.info(`[PUBLIC_BAN] ${uid} banned với lý do: ${reason}`)
+          console.info(`${PREFIX} ${uid} banned với lý do: ${reason}`)
         } else {
           if (user.public_ban) return
           await users.findByIdAndUpdate(uid, {
             public_ban: true,
             banReason: reason
           })
-          console.info(`[PUBLIC_BAN] ${uid} banned với lý do: ${reason}`)
+          console.info(`${PREFIX} ${uid} banned với lý do: ${reason}`)
         }
       });
 
