@@ -9,6 +9,8 @@ const users = model("users", new Schema({
   _id: String,
   prefix: String,
   token: String,
+  banned: Boolean,
+  banReason: String,
 }))
 
 export { guilds, users }

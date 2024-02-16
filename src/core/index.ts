@@ -46,6 +46,31 @@ for (const file of CommandFiles) {
   }
 }
 
+const core_CommandFiles = fs
+  .readdirSync("./src/core/commands")
+  .filter((file) => file.endsWith(".ts"));
+
+for (const file of CommandFiles) {
+  try {
+    import(`./commands/${file}`).then(command => {
+      command = command.command;
+      if (!command || !command.name || !command.execute)
+      console.error(`Lỗi khi load core command ${file} hãy báo lỗi trên github`);
+      else {
+        commands.set(command.name, command);
+    
+        if (command.aliases.length !== 0) {
+          command.aliases.forEach((alias: any) => {
+            aliases.set(alias, command);
+          });
+        }
+      }
+    })
+  } catch (error) {
+    console.error(`Lỗi khi load core command ${file} hãy báo lỗi trên github:`, error)
+  }
+}
+
 const eventFiles = fs
   .readdirSync("./src/events")
   .filter((file) => file.endsWith(".ts"));

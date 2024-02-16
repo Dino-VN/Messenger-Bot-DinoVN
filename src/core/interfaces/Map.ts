@@ -58,6 +58,7 @@ interface Config {
   BOT_ADMIN_BYPASS: boolean,
   PERFIX: string,
   TIMEZONE: string,
+	PUBLIC_BAN: boolean,
   UPTIME: boolean,
 	PORT?: number,
 }
