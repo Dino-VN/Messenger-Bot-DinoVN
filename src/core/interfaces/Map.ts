@@ -171,7 +171,7 @@ export interface api {
 			id: string,
 			fromIndex: number,
 		}[],
-		attachment?: ReadStream,
+		attachment?: ReadStream | ReadStream[],
 	}, threadID: string, callback?: ((err: any, messageInfo: event) => void) | string, messageID?: string): any;
 	sendTypingIndicator(threadID: string, callback?: ((err: any) => void)): any;
 	/**
