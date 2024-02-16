@@ -1,4 +1,4 @@
-import { Command } from '../interfaces';
+import { Command } from '../interfaces/index.ts';
 import { users } from '../module/data.ts';
 
 export const command: Command = {
