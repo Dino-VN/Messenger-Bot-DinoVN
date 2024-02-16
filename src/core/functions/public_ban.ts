@@ -23,14 +23,20 @@ export const functionFile: Function = {
             banReason: reason
           })
           await newUser.save()
+          console.info(`[PUBLIC_BAN] ${uid} banned với lý do: ${reason}`)
         } else {
           if (user.banned) return
           await users.findByIdAndUpdate(uid, {
             banned: true,
             banReason: reason
           })
+          console.info(`[PUBLIC_BAN] ${uid} banned với lý do: ${reason}`)
         }
       });
+
+      setInterval(() => {
+        functionFile.execute(api)
+      }, 30 * 60 * 1000)
     } catch (e) {
       // console.log(e)
     }
