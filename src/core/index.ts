@@ -35,7 +35,7 @@ for (const file of CommandFiles) {
       else {
         commands.set(command.name, command);
     
-        if (command.aliases.length !== 0) {
+        if (command.aliases && command.aliases.length !== 0) {
           command.aliases.forEach((alias: any) => {
             aliases.set(alias, command);
           });
@@ -60,7 +60,7 @@ for (const file of core_CommandFiles) {
       else {
         commands.set(command.name, command);
     
-        if (command.aliases.length !== 0) {
+        if (command.aliases && command.aliases.length !== 0) {
           command.aliases.forEach((alias: any) => {
             aliases.set(alias, command);
           });
