@@ -5,7 +5,7 @@
 ```
 git clone https://github.com/Dino-VN/Messenger-Bot-DinoVN.git
 ```
-**Cài đặt các package**
+### Cài đặt các package
 ```
 # Dùng npm
 npm install
@@ -14,14 +14,14 @@ yarn install
 # Dùng pnpm
 pnpm install
 ```
-**Setup env**\
+### Setup env 
 Vào [đây](https://www.mongodb.com/) để tạo tài khoản mongodb\
 Tạo file `.env` và chèn các dòng sau:
 ```
 MONGO_URI=mongodb+srv://... 
 ```
 Thay `mongodb+srv://...` bằng địa chỉ của tài khoản mongodb của bạn\
-**Chỉnh config của bot**\
+### Chỉnh config của bot
 Vào file `bot.config.js` và chỉnh sửa theo ý muốn\
 File `bot.config.js` mặc định:
 ```js
@@ -46,8 +46,8 @@ export default {
   // PORT: 3000,
 }
 ```
-**Chạy bot**
-Chạy bot bạn có thể dùng
+###C hạy bot
+Chạy bot bằng package manager
 ```
 # Dùng npm
 npm start
