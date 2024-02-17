@@ -3,8 +3,7 @@ import { users } from '../module/data.ts';
 
 export const command: Command = {
   name: 'ban',
-  aliases: [''],
-  description: "Ban ai đó không được dùng bot nữa",
+  description: "Ban ai đó không được dùng bot nữa, có thể dùng ban list để xem những người đã bị ban",
   groups: "All",
   permission: "owner",
   execute: async(api, event, args) => {
@@ -22,26 +21,40 @@ export const command: Command = {
     }
 
     if(uid == "0") return api.sendMessage("Vui lòng nhập ID/Reply người dùng cần ban", event.threadID, event.messageID)
-
-    const user = users.findById(uid)
-    if(!user) {
-      const newUser = new users({
-        _id: uid,
-        banned: true,
-        banReason: reason
-      })
-      await newUser.save()
+    
+    if (uid == "list") {
+      const banned = await users.find({banned: true});
+      const GBan = await users.find({public_ban: true});
+      let text = "Ban list:\n"
+      for (const user of banned) {
+        text += `${user._id} - ${user.banReason}\n`
+      }
+      for (const user of GBan) {
+        text += `${user._id} - ${user.PBanReason} - Global Ban\n`
+      }
+      return api.sendMessage(text, event.threadID, event.messageID)
     } else {
-      await users.findByIdAndUpdate(uid, {
-        banned: true,
-        banReason: reason
-      })
-    }
+      const user = await users.findById(uid)
+      if(!user) {
+        const newUser = new users({
+          _id: uid,
+          banned: true,
+          banReason: reason
+        })
+        await newUser.save()
+      } else {
+        if(user.banned) return api.sendMessage("Người dùng này đã bị ban", event.threadID, event.messageID);
+        await users.findByIdAndUpdate(uid, {
+          banned: true,
+          banReason: reason
+        })
+      }
 
-    return api.sendMessage(`Đã ban ${uid} với lý do: ${reason}`, event.threadID, (error, message) => {
-      setTimeout(() => {
-        api.unsendMessage(message.messageID)
-      }, 1000 * 10)
-    }, event.messageID)
+      return api.sendMessage(`Đã ban ${uid} với lý do: ${reason}`, event.threadID, (error, message) => {
+        setTimeout(() => {
+          api.unsendMessage(message.messageID)
+        }, 1000 * 10)
+      }, event.messageID)
+    }
   }
 }

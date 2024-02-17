@@ -28,7 +28,13 @@ let PREFIX = `${colors.red}[Global Ban]${colors.reset}`;
 
 export const functionFile: Function = {
   async execute(api) {
-    if (!api.config.PUBLIC_BAN) return
+    if (!api.config.PUBLIC_BAN) {
+      const public_ban = await users.find({ public_ban: true })
+      public_ban.forEach(async (uid) => {
+        await users.findByIdAndUpdate(uid._id, { public_ban: false, PBanReason: "" })
+        console.info(`${PREFIX} ${uid} đã được đưa ra khỏi danh sách ban`)
+      });
+    }
     try {
       const response = await fetch(API);
       const data = await response.json();
@@ -44,8 +50,7 @@ export const functionFile: Function = {
         const users_not_in_data = public_ban_ids.filter((uid: string) => !data.find((user: any) => user.uid === uid));
 
         users_not_in_data.forEach(async (uid: string) => {
-          if (!public_ban.find((u: any) => u.uid === uid)?.banned) users.findByIdAndUpdate(uid, { public_ban: false, banReason: "" })
-          else users.findByIdAndUpdate(uid, { public_ban: false })
+          await users.findByIdAndUpdate(uid, { public_ban: false, PBanReason: "" })
           console.info(`${PREFIX} ${uid} đã được đưa ra khỏi danh sách ban`)
         });
 
@@ -53,7 +58,7 @@ export const functionFile: Function = {
           const newUser = new users({
             _id: uid,
             public_ban: true,
-            banReason: reason
+            PBanReason: reason
           })
           await newUser.save()
           console.info(`${PREFIX} ${uid} banned với lý do: ${reason}`)
@@ -61,7 +66,7 @@ export const functionFile: Function = {
           if (user.public_ban) return
           await users.findByIdAndUpdate(uid, {
             public_ban: true,
-            banReason: reason
+            PBanReason: reason
           })
           console.info(`${PREFIX} ${uid} banned với lý do: ${reason}`)
         }

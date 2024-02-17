@@ -11,6 +11,7 @@ const users = model("users", new Schema({
   token: String,
   banned: Boolean,
   public_ban: Boolean,
+  PBanReason: String,
   banReason: String,
 }))
 

@@ -12,33 +12,33 @@ export const command: Command = {
     // api.sendMessage('pong', event.threadID, event.messageID);
     const ThreadInfo = await api.getThreadInfo(event.threadID);
 
-    let commands = [];
+    let commands: any[] = [];
 
-    const commandFiles = fs
-      .readdirSync("./src/commands/")
-      .filter((file) => file.endsWith(".ts"));
-    for (const file of commandFiles) {
-      let command = await import(`./${file}`);
-      command = command.command;
-      if (command && command.name || command && command.run) {
-        if (command.permission == "everyone" ||
-          command.permission == "admin" &&
+    api.commands.forEach((command) => {
+      let data = {
+        name: command.name,
+        aliases: command.aliases,
+        description: command.description,
+        permission: command.permission,
+        prefix: command.noPrefix
+      };
+      if (command.permission == "everyone") {
+        commands.push(data);
+      } else if (command.permission == "admin") {
+        if (
           ThreadInfo.adminIDs.includes(event.senderID) ||
-          command.permission == "owner" &&
-          event.senderID == api.config.OWNER_ID
+          (api.config.ADMIN_BYPASS &&
+            event.senderID == api.config.OWNER_ID &&
+            ThreadInfo.adminIDs.includes(event.senderID))
         ) {
-          commands.push({
-            name: command.name,
-            aliases: command.aliases,
-            description: command.description || "none",
-            prefix: command.noPrefix
-            // example: command.example,
-            // cooldown: command.cooldown,
-            // isGroup: command.isGroup,
-          });
+          commands.push(data);
+        }
+      } else if (command.permission == "owner") {
+        if (event.senderID == api.config.OWNER_ID) {
+          commands.push(data);
         }
       }
-    }
+    })
 
     let prefix = await getPrefix(api, event, event.threadID)
     

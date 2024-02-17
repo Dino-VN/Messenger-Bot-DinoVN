@@ -1,6 +1,7 @@
 import { aliases, commands, cooldowns, events } from "..";
 import { ReadStream } from "fs";
 import { BotAPI } from "../module/api.ts";
+import { reloadCommands, reloadEvents } from "../module/reload.ts";
 
 //facebook-comment-api
 interface FbApi {
