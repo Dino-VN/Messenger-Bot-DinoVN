@@ -1,5 +1,5 @@
 # Messenger Bot
-## Code này chỉ có 1 người code nên cếu có gì hãy pull request fix giúp mình nhé
+## Code này chỉ có 1 người code nên có gì hãy pull request fix giúp mình nhé
 ### Cách Tải
 **Tải bằng git**
 ```
