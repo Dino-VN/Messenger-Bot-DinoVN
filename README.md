@@ -1,5 +1,12 @@
 # Messenger Bot
 ## Code này chỉ có 1 người code nên có gì hãy pull request fix giúp mình nhé
+- [Cách Tải](#cách-tải)
+- [Cài đặt các package](#cài-đặt-các-package)
+- [Setup env](#setup-env)
+- [Chỉnh config của bot](#chỉnh-config-của-bot)
+- [Cách sử dụng](#cách-sử-dụng)
+- [Cách chạy](#cách-chạy)
+---
 ### Cách Tải
 **Tải bằng git**
 ```
@@ -46,7 +53,13 @@ export default {
   // PORT: 3000,
 }
 ```
-###C hạy bot
+### Cách sử dụng
+ - 📁src/commands - nơi chứa lệnh
+    - Xem file lệnh ví dụ tại [đây](https://github.com/Dino-VN/Messenger-Bot-DinoVN/blob/Core/src/commands/ping.ts) lệnh ping khi dùng lệnh `!ping` bot sẽ trả lời lại pong
+ - 📁src/events - nơi chứa các event
+    - Xem file lệnh ví dụ tại [đây](https://github.com/Dino-VN/Messenger-Bot-DinoVN/blob/Core/src/events/LogAllMessage.ts.example) event đó sẽ log tất cả tin nhắn bot nhìn thấy
+ - 📁src/functions - nơi chứa functions tất cả file trong này sẽ được chạy khi bot khởi động
+### Chạy bot
 Chạy bot bằng package manager
 ```
 # Dùng npm
