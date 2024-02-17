@@ -20,7 +20,7 @@ Tạo file `.env` và chèn các dòng sau:
 ```
 MONGO_URI=mongodb+srv://... 
 ```
-Thay `mongodb+srv://...` bằng địa chỉ của tài khoản mongodb của bạn
+Thay `mongodb+srv://...` bằng địa chỉ của tài khoản mongodb của bạn\
 **Chỉnh config của bot**\
 Vào file `bot.config.js` và chỉnh sửa theo ý muốn\
 File `bot.config.js` mặc định:
