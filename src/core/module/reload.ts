@@ -48,26 +48,26 @@ async function reloadCommands(api: api, event: event, callback?: (data: {
       console.error(`Lỗi khi tải lại lệnh(${file}):`, e);
       data.failed++;
     }
-    const core_commandFiles = fs
-      .readdirSync("./src/core/commands/")
-      .filter((file) => file.endsWith(".ts"));
-    for (const file of core_commandFiles) {
-      try {
-        let command = await importModule(`../commands/${file}`);
-        command = command.command;
-        if (!command || !command.name || !command.execute) return;
-        commands.set(command.name, command);
+  }
+  const core_commandFiles = fs
+    .readdirSync("./src/core/commands/")
+    .filter((file) => file.endsWith(".ts"));
+  for (const file of core_commandFiles) {
+    try {
+      let command = await importModule(`../commands/${file}`);
+      command = command.command;
+      if (!command || !command.name || !command.execute) return;
+      commands.set(command.name, command);
 
-        if (command.aliases && command.aliases.length !== 0) {
-          command.aliases.forEach((alias: any) => {
-            aliases.set(alias, command);
-          });
-        }
-        data.susccess++;
-      } catch (e) {
-        console.error(`Lỗi khi tải lại lệnh(${file}) core command hãy báo lỗi trên github:`, e);
-        data.failed++;
+      if (command.aliases && command.aliases.length !== 0) {
+        command.aliases.forEach((alias: any) => {
+          aliases.set(alias, command);
+        });
       }
+      data.susccess++;
+    } catch (e) {
+      console.error(`Lỗi khi tải lại lệnh(${file}) core command hãy báo lỗi trên github:`, e);
+      data.failed++;
     }
   }
   if (callback) callback(data);
@@ -95,7 +95,16 @@ async function reloadEvents(api: api, event: event, callback?: (data: {
       let event = await importModule(`../../events/${file}`);
       event = event.event;
       if (!event || !event.name || !event.execute) return;
-      events.set(event.name, event);
+      event.name.forEach((name: any) => {
+        // console.log(name)
+        // if(event.type == name) event.execute(api, event)
+        let fileName = file
+        if (!events.has(fileName)) {
+          events.set(fileName, new Collection<string, Event>());
+        }
+        const eventfile = events.get(fileName)
+        eventfile!.set(name, event);
+      });
       data.susccess++;
     } catch (e) {
       console.error(`Lỗi khi tải lại event(${file}):`, e);
@@ -110,7 +119,16 @@ async function reloadEvents(api: api, event: event, callback?: (data: {
       let event = await importModule(`../events/${file}`);
       event = event.event;
       if (!event || !event.name || !event.execute) return;
-      events.set(event.name, event);
+      event.name.forEach((name: any) => {
+        // console.log(name)
+        // if(event.type == name) event.execute(api, event)
+        let fileName = "core_" + file
+        if (!events.has(fileName)) {
+          events.set(fileName, new Collection<string, Event>());
+        }
+        const eventfile = events.get(fileName)
+        eventfile!.set(name, event);
+      });
       data.susccess++;
     } catch (e) {
       console.error(`Lỗi khi tải lại event(${file}) core event hãy báo lỗi trên github:`, e);

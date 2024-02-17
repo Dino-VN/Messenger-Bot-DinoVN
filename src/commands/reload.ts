@@ -13,7 +13,7 @@ export const command: Command = {
     const aliases = api.aliases;
     const events = api.events;
 
-    const type = args[0].toLowerCase();
+    const type = args[0] ? args[0].toLowerCase() : "all";
     if (!type || type == "all") {
       api.setMessageReaction("⏱️", event.messageID, async () => { }, true);
       const commands = await api.BotAPI.reloadCommands(api, event);
