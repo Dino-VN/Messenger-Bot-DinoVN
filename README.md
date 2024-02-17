@@ -1,7 +1,7 @@
 # Messenger Bot
 ## Code này chỉ có 1 người code nên cếu có gì hãy pull request fix giúp mình nhé
-### Cách cài đặt
-**Cài đặt bằng git**
+### Cách Tải
+**Tải bằng git**
 ```
 git clone https://github.com/Dino-VN/Messenger-Bot-DinoVN.git
 ```
