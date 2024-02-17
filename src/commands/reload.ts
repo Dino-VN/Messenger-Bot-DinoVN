@@ -19,7 +19,7 @@ export const command: Command = {
       const commands = await api.BotAPI.reloadCommands(api, event);
       const events = await api.BotAPI.reloadEvents(api, event);
       api.sendMessage(
-        `Đã reload lại ${commands?.susccess} lệnh${commands?.failed !== 0 ? `(${commands?.failed} lỗi)` : ""} ${events?.susccess} events${events?.failed !== 0 ? `(${events?.failed} lỗi)` : ""}`,
+        `Đã reload lại ${commands?.susccess} lệnh${commands?.failed !== 0 ? ` (${commands?.failed} lỗi)` : ""} ${events?.susccess} events${events?.failed !== 0 ? ` (${events?.failed} lỗi)` : ""}`,
         event.threadID,
         event.messageID,
       );
@@ -34,7 +34,7 @@ export const command: Command = {
       api.setMessageReaction("⏱️", event.messageID, async () => { }, true);
       const commands = await api.BotAPI.reloadCommands(api, event);
       api.sendMessage(
-        `Đã reload lại ${commands?.susccess} lệnh${commands?.failed !== 0 ? `(${commands?.failed} lỗi)` : ""}`,
+        `Đã reload lại ${commands?.susccess} lệnh${commands?.failed !== 0 ? ` (${commands?.failed} lỗi)` : ""}`,
         event.threadID,
         event.messageID,
       );
@@ -47,7 +47,7 @@ export const command: Command = {
       api.setMessageReaction("⏱️", event.messageID, async () => { }, true);
       const events = await api.BotAPI.reloadEvents(api, event);
       api.sendMessage(
-        `Đã reload lại ${events?.susccess} events${events?.failed !== 0 ? `(${events?.failed} lỗi)` : ""}`,
+        `Đã reload lại ${events?.susccess} events${events?.failed !== 0 ? ` (${events?.failed} lỗi)` : ""}`,
         event.threadID,
         event.messageID,
       );
