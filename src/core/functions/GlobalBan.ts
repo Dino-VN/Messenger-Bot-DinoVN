@@ -33,7 +33,7 @@ export const functionFile: Function = {
       const public_ban = await users.find({ public_ban: true })
       public_ban.forEach(async (uid) => {
         await users.findByIdAndUpdate(uid._id, { public_ban: false, PBanReason: "" })
-        console.info(`${PREFIX} ${uid} đã được đưa ra khỏi danh sách ban`)
+        console.info(`${PREFIX} ${uid._id} đã được đưa ra khỏi danh sách ban`)
       });
     }
     try {
