@@ -28,7 +28,7 @@ let PREFIX = `${colors.red}[Global Ban]${colors.reset}`;
 
 export const functionFile: Function = {
   async execute(api) {
-    if (!api.config.PUBLIC_BAN) {
+    if (!api.config.GLOBAL_BAN) {
       const public_ban = await users.find({ public_ban: true })
       public_ban.forEach(async (uid) => {
         await users.findByIdAndUpdate(uid._id, { public_ban: false, PBanReason: "" })

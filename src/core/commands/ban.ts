@@ -9,20 +9,8 @@ export const command: Command = {
   execute: async(api, event, args) => {
     let uid = "0"
     let reason = "Không có lý do"
- 
-    if(event.messageReply) {
-      uid = event.messageReply.senderID
-      if (!args[0]) return api.sendMessage("Vui lòng nhập lý do ban", event.threadID, event.messageID)
-      reason = args.join(" ")
-    } else if(args[0]) {
-      uid = args[0]
-      if (!args[1] && uid != "list") return api.sendMessage("Vui lòng nhập lý do ban", event.threadID, event.messageID)
-      reason = args.slice(1).join(" ")
-    }
-
-    if(uid == "0") return api.sendMessage("Vui lòng nhập ID/Reply người dùng cần ban", event.threadID, event.messageID)
     
-    if (uid == "list") {
+    if (args[0] == "list") {
       const banned = await users.find({banned: true});
       const GBan = await users.find({public_ban: true});
       let text = "Ban list:\n"
@@ -34,6 +22,18 @@ export const command: Command = {
       }
       return api.sendMessage(text, event.threadID, event.messageID)
     } else {
+      if(event.messageReply) {
+        uid = event.messageReply.senderID
+        if (!args[0]) return api.sendMessage("Vui lòng nhập lý do ban", event.threadID, event.messageID)
+        reason = args.join(" ")
+      } else if(args[0]) {
+        uid = args[0]
+        if (!args[1]) return api.sendMessage("Vui lòng nhập lý do ban", event.threadID, event.messageID)
+        reason = args.slice(1).join(" ")
+      }
+  
+      if(uid == "0") return api.sendMessage("Vui lòng nhập ID/Reply người dùng cần ban", event.threadID, event.messageID)
+
       const user = await users.findById(uid)
       if(!user) {
         const newUser = new users({
