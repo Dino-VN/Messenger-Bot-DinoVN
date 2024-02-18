@@ -81,7 +81,7 @@ async function GlobalBan(api: any) {
 
 export const functionFile: Function = {
   async execute(api) {
-    console.log(`Đã bật module Global Ban.`)
+    console.info(`Đã bật module Global Ban.`)
     await GlobalBan(api)
   },
 };
