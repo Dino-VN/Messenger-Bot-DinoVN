@@ -217,6 +217,7 @@ async function startBot() {
       api.aliases = aliases;
       api.cooldowns = cooldowns;
       api.events = events;
+      api.global = {};
 
       const userId = api.getCurrentUserID()
       const user = await api.getUserInfo([userId])

@@ -60,6 +60,7 @@ interface Config {
   PERFIX: string,
   TIMEZONE: string,
 	GLOBAL_BAN: boolean,
+	DAILY_CHAT: boolean,
   UPTIME: boolean,
 	PORT?: number,
 }

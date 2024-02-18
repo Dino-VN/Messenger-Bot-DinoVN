@@ -3,7 +3,7 @@ import express from "express";
 
 export const functionFile: Function = {
 	execute(api) {
-		if(api.config.UPTIME) return
+		if(!api.config.UPTIME) return
 		const app = express();
 
 		app.all("/", (req, res) => {
