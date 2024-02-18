@@ -26,7 +26,7 @@ const colors = {
 const API = "https://bot.d1n0saur.xyz/api/ban_list";
 let PREFIX = `${colors.red}[Global Ban]${colors.reset}`;
 
-function GlobalBan(api: any) {
+async function GlobalBan(api: any) {
   if (!api.config.GLOBAL_BAN) {
     const public_ban = await users.find({ public_ban: true })
     public_ban.forEach(async (uid) => {
@@ -81,7 +81,7 @@ function GlobalBan(api: any) {
 
 export const functionFile: Function = {
   async execute(api) {
-    console.log(`${PREFIX} Đang ${api.config.GLOBAL_BAN ? "được bật": "tắt"}.`)
-    GlobalBan(api)
+    console.log(`Đã bật module Global Ban.`)
+    await GlobalBan(api)
   },
 };
