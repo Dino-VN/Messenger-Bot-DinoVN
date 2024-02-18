@@ -28,6 +28,7 @@ let PREFIX = `${colors.red}[Global Ban]${colors.reset}`;
 
 export const functionFile: Function = {
   async execute(api) {
+    console.log(`${PREFIX} Đang được bật...`)
     if (!api.config.GLOBAL_BAN) {
       const public_ban = await users.find({ public_ban: true })
       public_ban.forEach(async (uid) => {
