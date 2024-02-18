@@ -16,7 +16,7 @@ export const command: Command = {
       reason = args.join(" ")
     } else if(args[0]) {
       uid = args[0]
-      if (!args[1]) return api.sendMessage("Vui lòng nhập lý do ban", event.threadID, event.messageID)
+      if (!args[1] && uid != "list") return api.sendMessage("Vui lòng nhập lý do ban", event.threadID, event.messageID)
       reason = args.slice(1).join(" ")
     }
 
