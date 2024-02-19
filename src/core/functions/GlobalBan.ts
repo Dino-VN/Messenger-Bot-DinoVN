@@ -1,6 +1,7 @@
 import { Function } from "../interfaces/index.ts";
 import fetch from "node-fetch";
 import { users } from "../module/data.ts";
+import botConfig from "../../../bot.config.js";
 
 const colors = {
   reset: "\x1B[0m",
@@ -27,7 +28,7 @@ const API = "https://bot.d1n0saur.xyz/api/ban_list";
 let PREFIX = `${colors.red}[Global Ban]${colors.reset}`;
 
 async function GlobalBan(api: any) {
-  if (!api.config.GLOBAL_BAN) {
+  if (!botConfig.GLOBAL_BAN) {
     const public_ban = await users.find({ public_ban: true })
     public_ban.forEach(async (uid) => {
       await users.findByIdAndUpdate(uid._id, { public_ban: false, PBanReason: "" })
