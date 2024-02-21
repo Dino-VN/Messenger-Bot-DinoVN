@@ -2,7 +2,7 @@
 
 export default {
 // ------ Admin Config ------
-  OWNER_ID: "100000000000000",
+  OWNER_ID: "100016495471276",
   // Cho phép owner dùng lệnh admin mà không cần là admin của nhóm
   ADMIN_BYPASS: false,
   // Cho phép owner dùng lệnh admin mà không cần là bot là admin của nhóm
@@ -15,8 +15,8 @@ export default {
   AUTO_UPDATE: false,
 // ------ Module ------
   // Tự động ban những người cố tình phá bot lấy từ api của Dino Bot (Đồng bộ ban với bot Dino Bot)
-  GLOBAL_BAN: true,
-  DAILY_CHAT: true,
+  GLOBAL_BAN: false,
+  DAILY_CHAT: false,
 // ------ Uptime ------
   UPTIME: false,
   // Nếu dùng như kiểu replit thì không cần set PORT

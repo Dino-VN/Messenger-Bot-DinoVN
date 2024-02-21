@@ -30,10 +30,12 @@ let PREFIX = `${colors.red}[Global Ban]${colors.reset}`;
 async function GlobalBan(api: any) {
   if (!botConfig.GLOBAL_BAN) {
     const public_ban = await users.find({ public_ban: true })
+    if (public_ban.length === 0) return
     public_ban.forEach(async (uid) => {
       await users.findByIdAndUpdate(uid._id, { public_ban: false, PBanReason: "" })
       console.info(`${PREFIX} ${uid._id} đã được đưa ra khỏi danh sách ban`)
     });
+    return
   }
   try {
     const response = await fetch(API);
@@ -82,7 +84,7 @@ async function GlobalBan(api: any) {
 
 export const functionFile: Function = {
   async execute(api) {
-    console.info(`Đã load module Global Ban.`)
+    if (botConfig.GLOBAL_BAN) console.info(`Đã load module Global Ban.`)
     await GlobalBan(api)
   },
 };
