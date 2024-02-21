@@ -32,9 +32,11 @@ Thay `mongodb+srv://...` bằng địa chỉ của tài khoản mongodb của b�
 Vào file `bot.config.js` và chỉnh sửa theo ý muốn\
 File `bot.config.js` mặc định:
 ```js
+// !! Những thứ quan trong như MONGO_URI vẫn sẽ ở trong .env !!
+
 export default {
 // ------ Admin Config ------
-  OWNER_ID: "100000000000000",
+  OWNER_ID: "100016495471276",
   // Cho phép owner dùng lệnh admin mà không cần là admin của nhóm
   ADMIN_BYPASS: false,
   // Cho phép owner dùng lệnh admin mà không cần là bot là admin của nhóm
@@ -42,11 +44,13 @@ export default {
 // ------ Bot Config------
   PERFIX: "!",
   TIMEZONE: "Asia/Ho_Chi_Minh",
-  // Tự động ban những người cố tình phá bot lấy từ api của Dino Bot (Đồng bộ ban với bot Dino Bot)
-  GLOBAL_BAN: true,
 // ------ Update ------
   UPDATE: true,
   AUTO_UPDATE: false,
+// ------ Module ------
+  // Tự động ban những người cố tình phá bot lấy từ api của Dino Bot (Đồng bộ ban với bot Dino Bot)
+  GLOBAL_BAN: true,
+  DAILY_CHAT: false,
 // ------ Uptime ------
   UPTIME: false,
   // Nếu dùng như kiểu replit thì không cần set PORT
