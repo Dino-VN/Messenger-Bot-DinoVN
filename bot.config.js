@@ -15,7 +15,7 @@ export default {
   AUTO_UPDATE: false,
 // ------ Module ------
   // Tự động ban những người cố tình phá bot lấy từ api của Dino Bot (Đồng bộ ban với bot Dino Bot)
-  GLOBAL_BAN: false,
+  GLOBAL_BAN: true,
   DAILY_CHAT: false,
 // ------ Uptime ------
   UPTIME: false,
