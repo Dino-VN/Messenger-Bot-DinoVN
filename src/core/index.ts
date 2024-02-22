@@ -40,6 +40,13 @@ for (const file of CommandFiles) {
             aliases.set(alias, command);
           });
         }
+        if(command.preload) {
+          try {
+            command.preload()
+          } catch (e) {
+            console.error(`Lỗi khi chạy preload của lệnh ${file}`, e)
+          }
+        }
       }
     })
   } catch (error) {

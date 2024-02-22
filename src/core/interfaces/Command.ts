@@ -9,6 +9,11 @@ interface Run {
   ): any;
 }
 
+interface Preload {
+  (
+  ): any
+}
+
 /**
  * @property {String} name - Tên của lệnh
  * @property {Array} description - idk
@@ -63,5 +68,6 @@ export interface Command {
    * @param CollectionAliases - Aliases Collection của bot
    * @param CollectionEvent - Events Collection của bot
    */
-  execute: Run;
+  execute: Run,
+  preload?: Preload,
 }

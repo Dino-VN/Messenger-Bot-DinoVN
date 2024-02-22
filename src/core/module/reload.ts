@@ -43,6 +43,13 @@ async function reloadCommands(api: api, event: event, callback?: (data: {
           aliases.set(alias, command);
         });
       }
+      if(command.preload) {
+        try {
+          command.preload()
+        } catch (e) {
+          console.error(`Lỗi khi chạy preload của lệnh ${file}`, e)
+        }
+      }
       data.susccess++;
     } catch (e) {
       console.error(`Lỗi khi tải lại lệnh(${file}):`, e);

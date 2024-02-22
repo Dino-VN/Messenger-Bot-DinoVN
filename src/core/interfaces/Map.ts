@@ -2,6 +2,7 @@ import { aliases, commands, cooldowns, events } from "..";
 import { ReadStream } from "fs";
 import { BotAPI } from "../module/api.ts";
 import { reloadCommands, reloadEvents } from "../module/reload.ts";
+import { Stream } from "stream";
 
 //facebook-comment-api
 interface FbApi {
@@ -177,7 +178,7 @@ export interface api {
 			id: string,
 			fromIndex: number,
 		}[],
-		attachment?: ReadStream | ReadStream[],
+		attachment?: Stream | ReadStream | ReadStream[],
 	}, threadID: string, callback?: ((err: any, messageInfo: event) => void) | string, messageID?: string): any;
 	sendTypingIndicator(threadID: string, callback?: ((err: any) => void)): any;
 	/**
