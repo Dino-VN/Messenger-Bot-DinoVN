@@ -75,3 +75,13 @@ Hoặc chạy bằng lệnh node
 ```
 node index.js
 ```
+---
+### Update log
+**22/2/2014**
+```ts
+// Thêm
+api.sendCommemt(string | {
+  body: string,
+  attachment: fs.ReadStream
+}, postId: string, callback?: (error, data))
+```
