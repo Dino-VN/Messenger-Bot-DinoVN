@@ -14,6 +14,7 @@ import { api } from "./interfaces/Map.ts";
 import botConfig from "../../bot.config.js";
 import { checkUpdate } from "./module/update.ts";
 import { users } from "./module/data.ts";
+import { API } from "./api.ts";
 
 const events: Collection<string, Collection<string, Event>> = new Collection();
 const commands: Collection<string, Command> = new Collection();
@@ -219,6 +220,8 @@ async function startBot() {
       }
 
       doneAnimation("Đang kết nối với Facebook...", loading)
+
+      api = API(api);
 
       api.commands = commands;
       api.aliases = aliases;

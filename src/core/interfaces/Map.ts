@@ -3,6 +3,7 @@ import { ReadStream } from "fs";
 import { BotAPI } from "../module/api.ts";
 import { reloadCommands, reloadEvents } from "../module/reload.ts";
 import { Stream } from "stream";
+import { APIModule } from "../api.ts";
 
 //facebook-comment-api
 interface FbApi {
@@ -66,7 +67,7 @@ interface Config {
 	PORT?: number,
 }
 
-export interface api {
+export interface api extends APIModule {
 	//Custom
 	commands: typeof commands
 	aliases: typeof aliases
