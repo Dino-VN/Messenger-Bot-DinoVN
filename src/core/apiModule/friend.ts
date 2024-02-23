@@ -1,16 +1,21 @@
 import axios from "axios";
 import { api } from "../interfaces/Map";
 import { getFb_dtsg } from "./tool";
+import fs from "fs";
 
 export async function getRecommendedFriends(
   api: api,
   callback?: (error: any, data?: any) => void
 ) {
+  const cookie = JSON.parse(fs.readFileSync("./appstate.json", "utf8"))
+    .map((x: { key: any; value: any }) => `${x.key}=${x.value}`)
+    .join("; "); // Thay thế bằng chuỗi cookie của bạn
+
   var options = {
     method: 'POST',
     url: 'https://www.facebook.com/api/graphql',
     headers: {
-      cookie: 'c_user=61556257198316; xs=32%253AxEiMiQv-ZcfKbg%253A2%253A1708345308%253A-1%253A10601%253A%253AAcVhRFlUQD7JavBcIlSRZ1pJ-j37NzxfSer_YrVw9Xc; fr=1NCBJveR9rD13raHP.AWW9W3ZP57MfrnGqkfz8Z3p00Fo.Bl2DmR.qD.AAA.0.0.Bl2DmR.AWUf04ZqV7Q; sb=4znYZUHk6nevu0BKM9iL3Qf7; ps_n=0; ps_l=0',
+      cookie: cookie,
       'content-type': 'application/x-www-form-urlencoded',
       'sec-fetch-mode': 'cors',
       'sec-fetch-site': 'same-origin',
@@ -19,7 +24,7 @@ export async function getRecommendedFriends(
     data: {
       av: '61556257198316',
       __user: '61556257198316',
-      fb_dtsg: 'NAcMp3e1gvU4r5qHkBjVXqGDiRcUw1hY8-oCXVnzSSAisXQw_kvRUfw:32:1708345308',
+      fb_dtsg: await getFb_dtsg(),
       fb_api_caller_class: 'RelayModern',
       fb_api_req_friendly_name: 'FriendingCometSuggestionsRootQuery',
       variables: '{"scale":1}',
@@ -27,13 +32,17 @@ export async function getRecommendedFriends(
     }
   };
   
-  const res = JSON.parse(await axios.request(options))
+  let res = await axios.request(options)
+
+  if (!res.data) {
+    if (callback) callback(res);
+  }
 
   // await api.httpPost("https://www.facebook.com/api/graphql/", form));
-  if (res.data) {
-    if (callback) callback(null, res.data);
+  if (res.data.data) {
+    if (callback) callback(null, res.data.data);
   } else {
-    if (callback) callback(res);
+    if (callback) callback(res.data);
   }
 }
 
