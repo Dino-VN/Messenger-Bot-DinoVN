@@ -11,6 +11,7 @@ export async function getRecommendedFriends(
     fb_dtsg: await getFb_dtsg(),
     fb_api_caller_class: "RelayModern",
     fb_api_req_friendly_name: "FriendingCometSuggestionsRootQuery",
+    variables: '{"scale":1}',
     doc_id: "24773035982311104",
   };
 
