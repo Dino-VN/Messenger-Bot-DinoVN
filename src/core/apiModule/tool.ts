@@ -4,7 +4,10 @@ import cheerio from "cheerio";
 
 export async function getFb_dtsg() {
   const url = "https://mbasic.facebook.com/home.php"; // Thay thế URL tương ứng
- 
+  
+  const cookie = JSON.parse(fs.readFileSync("./appstate.json", "utf8"))
+    .map((x: { key: any; value: any }) => `${x.key}=${x.value}`)
+    .join("; "); // Thay thế bằng chuỗi cookie của bạn
 
   const axiosInstance = axios.create({
     headers: {
