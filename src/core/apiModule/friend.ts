@@ -13,9 +13,9 @@ export async function getRecommendedFriends(
     fb_api_req_friendly_name: "FriendingCometSuggestionsRootQuery",
   };
 
-  const res = await api.httpPost("https://www.facebook.com/api/graphql/", form);
+  const res = JSON.parse(await api.httpPost("https://www.facebook.com/api/graphql/", form));
   if (res.data) {
-    if (callback) callback(null, JSON.parse(res.data));
+    if (callback) callback(null, res.data);
   } else {
     if (callback) callback(res);
   }
@@ -51,11 +51,10 @@ export async function sendFrendRequest(
     doc_id: "24773035982311104",
   };
 
-  api.httpPost("https://www.facebook.com/api/graphql/", form).then((res) => {
-    if (res.data) {
-      if (callback) callback(null, JSON.parse(res.data));
-    } else {
-      if (callback) callback(res);
-    }
-  });
+  const res = JSON.parse(await api.httpPost("https://www.facebook.com/api/graphql/", form))
+  if (res.data) {
+    if (callback) callback(null, res.data);
+  } else {
+    if (callback) callback(res);
+  }
 }
