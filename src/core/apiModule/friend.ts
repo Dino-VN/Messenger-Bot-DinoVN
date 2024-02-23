@@ -22,8 +22,8 @@ export async function getRecommendedFriends(
       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
     },
     data: {
-      av: '61556257198316',
-      __user: '61556257198316',
+      av: api.getCurrentUserID(),
+      __user: api.getCurrentUserID(),
       fb_dtsg: await getFb_dtsg(),
       fb_api_caller_class: 'RelayModern',
       fb_api_req_friendly_name: 'FriendingCometSuggestionsRootQuery',
