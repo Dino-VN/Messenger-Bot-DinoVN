@@ -11,6 +11,7 @@ export async function getRecommendedFriends(
     fb_dtsg: await getFb_dtsg(),
     fb_api_caller_class: "RelayModern",
     fb_api_req_friendly_name: "FriendingCometSuggestionsRootQuery",
+    doc_id: "24773035982311104",
   };
 
   const res = JSON.parse(await api.httpPost("https://www.facebook.com/api/graphql/", form));
