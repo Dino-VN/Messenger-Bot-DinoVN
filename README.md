@@ -77,6 +77,24 @@ node index.js
 ```
 ---
 ### Update log
+**23/2/2014 - 15:20**
+```ts
+// Thêm
+api.on(string[], callback: (event))
+api.remove(string)
+// Ví dụ sử dụng
+api.sendMessage(`pong, ${ping} ms`, event.threadID, (e, m) => {
+  let id = api.on(["message_reply"], (event) => {
+    if(event.messageReply!.messageID == m.messageID) {
+      api.sendMessage(event.body, event.threadID);
+    }
+  })
+  setTimeout(() => {
+    api.sendMessage("Xóa event", event.threadID);
+    api.remove(id)
+  }, 30000);
+},event.messageID);
+```
 **23/2/2024 - 13:00**
 ```ts
 // Thêm

@@ -17,6 +17,9 @@ import { users } from "./module/data.ts";
 import { API } from "./api.ts";
 
 const events: Collection<string, Collection<string, Event>> = new Collection();
+const OnEvents: Collection<string, Collection<string, {
+  execute: (event: any) => void
+}>> = new Collection();
 const commands: Collection<string, Command> = new Collection();
 const aliases: Collection<string, Command> = new Collection();
 const cooldowns: Collection<string, Cooldown> = new Collection();
@@ -180,6 +183,10 @@ function loadMqtt(api: api) {
       // console.log(hevent)
       if (hevent) (hevent as Event).execute(api, event);
     });
+    OnEvents.map(eventfile => {
+      let hevent = eventfile.get(event.type);
+      if (hevent) (hevent as any).execute(event);
+    })
   });
   setTimeout(() => {
     event.stopListening()
@@ -228,6 +235,7 @@ async function startBot() {
       api.cooldowns = cooldowns;
       api.events = events;
       api.global = {};
+      api.global.OnEvents = OnEvents;
 
       const userId = api.getCurrentUserID()
       const user = await api.getUserInfo([userId])
