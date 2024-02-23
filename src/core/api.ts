@@ -1,9 +1,14 @@
 import { Stream } from "stream";
 import fs from "fs";
 import { sendCMT, uploadImageToFacebook } from "./apiModule/sendComment";
+import { getFb_dtsg } from "./apiModule/tool";
+import { getRecommendedFriends, sendFrendRequest } from "./apiModule/friend";
 
 export interface APIModule {
   sendComment: (body: string | { body: string, attachment: Stream | fs.ReadStream }, postId: string, callback?: (error: any, data: any) => void) => void;
+  getFb_dtsg: () => Promise<string>;
+  getRecommendedFriends: (callback?: (error: any, data: any) => void) => void;
+  sendFrendRequest: (userID: string | string[], callback?: (error: any, data: any) => void) => void;
 }
 
 export function API(api: any) {
@@ -25,6 +30,12 @@ export function API(api: any) {
       }
     }
   };
-
+  api.getFb_dtsg = getFb_dtsg
+  api.getRecommendedFriends = (callback?: (error: any, data?: any) => void) => {
+    getRecommendedFriends(api, callback);
+  }
+  api.sendFrendRequest = (userID: string | string[], callback?: (error: any, data?: any) => void) => {
+    sendFrendRequest(api, userID, callback);
+  }
   return api;
 }

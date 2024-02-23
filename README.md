@@ -77,7 +77,13 @@ node index.js
 ```
 ---
 ### Update log
-**22/2/2014**
+**23/2/2024 - 13:00**
+```ts
+// Thêm
+api.getRecommendedFriends(callback?: (error, data?))
+api.sendFrendRequest: (string | string[], callback?: (error, data));
+```
+**22/2/2024**
 ```ts
 // Thêm
 api.sendCommemt(string | {
