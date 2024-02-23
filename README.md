@@ -6,6 +6,7 @@
 - [Chỉnh config của bot](#chỉnh-config-của-bot)
 - [Cách sử dụng](#cách-sử-dụng)
 - [Cách chạy](#cách-chạy)
+- [Update logs](#update-log)
 ---
 ### Cách Tải
 **Tải bằng git**
