@@ -52,6 +52,7 @@ async function GlobalBan(api: any) {
       const users_not_in_data = public_ban_ids.filter((uid: string) => !data.find((user: any) => user.uid === uid));
 
       users_not_in_data.forEach(async (uid: string) => {
+        if (!uid) return
         await users.findByIdAndUpdate(uid, { public_ban: false, PBanReason: "" })
         console.info(`${PREFIX} ${uid} đã được đưa ra khỏi danh sách ban`)
       });
